@@ -8,6 +8,11 @@ var StaticFeatures = new ol.Collection();
 var SiteCircleFeatures = new ol.Collection();
 var PlaneIconFeatures = new ol.Collection();
 var PlaneTrailFeatures = new ol.Collection();
+var RnavWayFeatures = new ol.Collection();
+var LowWayFeatures = new ol.Collection();
+var ArrivalFeatures = new ol.Collection();
+var CircleFeatures = new ol.Collection();
+var DepartureFeatures = new ol.Collection();
 var Planes = {};
 var PlanesOrdered = [];
 var SelectedPlane = null;
@@ -299,6 +304,11 @@ function initialize() {
                             'layer_site_pos': true,
                             'layer_ac_trail': true,
                             'layer_ac_positions': true
+                            'layer_Rnav_Way': false,
+                            'layer_Low_Way': false,
+                            'layer_circles': true,
+                            'layer_arrival': false,
+                            'layer_departure': false
                         };
                         MapSettings.DisplayUnits = DefaultDisplayUnits;
                         MapSettings.AltitudeChart = true;
@@ -419,12 +429,12 @@ function end_load_history() {
 // that is a closed circle on the sphere such that the
 // great circle distance from 'center' to each point is
 // 'radius' meters
-function make_geodesic_circle(center, radius, points) {
+function make_geodesic_circle(center, radius, points, sd, ed) {
     var angularDistance = radius / 6378137.0;
     var lon1 = center[0] * Math.PI / 180.0;
     var lat1 = center[1] * Math.PI / 180.0;
     var geom = new ol.geom.LineString();
-    for (var i = 0; i <= points; ++i) {
+    for (var i = sd; i <= ed; ++i) {
         var bearing = i * 2 * Math.PI / points;
 
         var lat2 = Math.asin(Math.sin(lat1) * Math.cos(angularDistance) +
@@ -477,6 +487,10 @@ function initialize_map() {
 	}
     });
     $("#alt_chart_checkbox").trigger("change");
+
+    mapmarkers();
+    routes();
+    circles();
 
     // Initialize OL3
 
