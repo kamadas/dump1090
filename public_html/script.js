@@ -213,7 +213,6 @@ var PositionHistorySize = 0;
 function initialize() {
     // Set page basics
     document.title = PageName;
-    $("#infoblock_name").text(PageName);
 
     PlaneRowTemplate = document.getElementById("plane_row_template");
 
@@ -300,7 +299,7 @@ function initialize() {
                             'layer_departure': false
                         };
                         MapSettings.DisplayUnits = DefaultDisplayUnits;
-                        MapSettings.AltitudeChart = true;
+                        MapSettings.AltitudeChart = false;
                         Dump1090DB.indexedDB.putSetting('MapSettings', MapSettings);
                         console.log("MapSettings initialized.");
                     })
@@ -461,7 +460,7 @@ function initialize_map() {
     $("#alt_chart_checkbox").checkboxradio({ icon: false });
     $("#alt_chart_checkbox").prop('checked', MapSettings.AltitudeChart).checkboxradio("refresh");
     $("#alt_chart_checkbox").on("change", function(){
-        var showAltChart = $(this).prop('checked');
+        var showAltChart = false;
         MapSettings.AltitudeChart = showAltChart;
         Dump1090DB.indexedDB.putSetting('MapSettings', MapSettings);
         // if you're using custom colors always hide the chart
@@ -624,7 +623,7 @@ function initialize_map() {
         }),
         controls: [new ol.control.Zoom(),
             new ol.control.Rotate(),
-            new ol.control.Attribution({collapsed: false}),
+            new ol.control.Attribution({collapsed: true}),
             new ol.control.ScaleLine({units: MapSettings.DisplayUnits}),
             new ol.control.LayerSwitcher(),
             new MapControls()
@@ -832,13 +831,6 @@ function createSiteCircleFeatures() {
             stroke: new ol.style.Stroke({
                 color: '#000000',
                 width: 1
-            }),
-            text: new ol.style.Text({
-                font: '10px Helvetica Neue, sans-serif',
-                fill: new ol.style.Fill({color: '#000'}),
-                offsetY: -8,
-                text: format_distance_long(distance, MapSettings.DisplayUnits, 0)
-
             })
         });
     };
@@ -1073,6 +1065,9 @@ function refreshSelected() {
     } else {
         $('#selected_track_rate').text(selected.track_rate.toFixed(2));
     }
+
+    $('#selected_geom_rate').text(format_vert_rate_long(selected.geom_rate, MapSettings.DisplayUnits));
+
 
     if (selected.nav_qnh === null) {
         $('#selected_nav_qnh').text("n/a");
