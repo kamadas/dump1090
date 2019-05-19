@@ -256,8 +256,8 @@ function initialize() {
                     SiteShow = true;
                     SiteLat = data.lat;
                     SiteLon = data.lon;
-                    DefaultCenterLat = data.lat;
-                    DefaultCenterLon = data.lon;
+//                    DefaultCenterLat = data.lat;
+//                    DefaultCenterLon = data.lon;
                 }
 
                 Dump1090Version = data.version;
