@@ -527,7 +527,6 @@ function initialize_map() {
             new ol.layer.Vector({
                 name: 'Low_Way',
                 type: 'overlay',
-
                 title: 'Low Routes & Points',
                 source: new ol.source.Vector({
                     features: LowWayFeatures,
@@ -852,7 +851,7 @@ function createSiteCircleFeatures() {
 
     for (var i = 0; i < SiteCirclesDistances.length; ++i) {
         var distance = SiteCirclesDistances[i] * conversionFactor;
-        var circle = make_geodesic_circle(SitePosition, distance, 360);
+        var circle = make_geodesic_circle(SitePosition, distance, 360, 0, 360);
         circle.transform('EPSG:4326', 'EPSG:3857');
         var feature = new ol.Feature(circle);
         feature.setStyle(circleStyle(distance));
