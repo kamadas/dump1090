@@ -22,6 +22,7 @@ function PlaneObject(icao) {
     this.tas = null;
 
     this.track = null;
+    this.track_prev = null;
     this.track_rate = null;
     this.mag_heading = null;
     this.true_heading = null;
@@ -381,7 +382,13 @@ PlaneObject.prototype.updateIcon = function () {
         rotation = this.mag_heading;
     }
     if (rotation === null) {
+        rotation = this.track_prev;
+    }
+    if (rotation === null) {
         rotation = 0;
+    }
+    if (this.track !== null) {
+        this.track_prev = this.track;
     }
     //var transparentBorderWidth = (32 / baseMarker.scale / scaleFactor).toFixed(1);
 
