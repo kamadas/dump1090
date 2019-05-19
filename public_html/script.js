@@ -1062,18 +1062,6 @@ function refreshSelected() {
     $('#selected_rssi').text(selected.rssi.toFixed(1) + ' dBFS');
     $('#selected_message_count').text(selected.messages);
 
-    $('#selected_altitude_geom').text(format_altitude_long(selected.alt_geom, selected.geom_rate, MapSettings.DisplayUnits));
-    $('#selected_heading_mag').text(format_track_long(selected.mag_heading));
-    $('#selected_heading_true').text(format_track_long(selected.true_heading));
-    $('#selected_speed_ias').text(format_speed_long(selected.ias, MapSettings.DisplayUnits));
-    $('#selected_speed_tas').text(format_speed_long(selected.tas, MapSettings.DisplayUnits));
-
-    if (selected.mach === null) {
-        $('#selected_speed_mach').text('n/a');
-    } else {
-        $('#selected_speed_mach').text(selected.mach.toFixed(3));
-    }
-
     if (selected.roll === null) {
         $('#selected_roll').text('n/a');
     } else {
@@ -1086,70 +1074,16 @@ function refreshSelected() {
         $('#selected_track_rate').text(selected.track_rate.toFixed(2));
     }
 
-    $('#selected_geom_rate').text(format_vert_rate_long(selected.geom_rate, MapSettings.DisplayUnits));
-
     if (selected.nav_qnh === null) {
         $('#selected_nav_qnh').text("n/a");
     } else {
         $('#selected_nav_qnh').text(selected.nav_qnh.toFixed(1) + " hPa");
     }
-    $('#selected_nav_altitude').text(format_altitude_long(selected.nav_altitude, 0, MapSettings.DisplayUnits));
-    $('#selected_nav_heading').text(format_track_long(selected.nav_heading));
+
     if (selected.nav_modes === null) {
         $('#selected_nav_modes').text("n/a");
     } else {
         $('#selected_nav_modes').text(selected.nav_modes.join());
-    }
-    if (selected.nic_baro === null) {
-        $('#selected_nicbaro').text("n/a");
-    } else {
-        if (selected.nic_baro === 1) {
-            $('#selected_nicbaro').text("cross-checked");
-        } else {
-            $('#selected_nicbaro').text("not cross-checked");
-        }
-    }
-
-    $('#selected_nacp').text(format_nac_p(selected.nac_p));
-    $('#selected_nacv').text(format_nac_v(selected.nac_v));
-    if (selected.rc === null) {
-        $('#selected_rc').text("n/a");
-    } else if (selected.rc === 0) {
-        $('#selected_rc').text("Unknown");
-    } else {
-        $('#selected_rc').text(format_distance_short(selected.rc, MapSettings.DisplayUnits));
-    }
-
-    if (selected.sil === null || selected.sil_type === null) {
-        $('#selected_sil').text("n/a");
-    } else {
-        var sampleRate = "";
-        var silDesc = "";
-        if (selected.sil_type === "perhour") {
-            sampleRate = " per flight hour";
-        } else if (selected.sil_type === "persample") {
-            sampleRate = " per sample";
-        }
-
-        switch (selected.sil) {
-            case 0:
-                silDesc = "&gt; 1×10<sup>-3</sup>";
-                break;
-            case 1:
-                silDesc = "≤ 1×10<sup>-3</sup>";
-                break;
-            case 2:
-                silDesc = "≤ 1×10<sup>-5</sup>";
-                break;
-            case 3:
-                silDesc = "≤ 1×10<sup>-7</sup>";
-                break;
-            default:
-                silDesc = "n/a";
-                sampleRate = "";
-                break;
-        }
-        $('#selected_sil').html(silDesc + sampleRate);
     }
 
     if (selected.version === null) {
@@ -1162,42 +1096,6 @@ function refreshSelected() {
         $('#selected_adsb_version').text('v2 (DO-260B)');
     } else {
         $('#selected_adsb_version').text('v' + selected.version);
-    }
-
-    // Wind speed and direction
-    if(selected.gs !== null && selected.tas !== null && selected.track !== null && selected.mag_heading !== null) {
-        selected.track = (selected.track || 0) * 1 || 0;
-        selected.mag_heading = (selected.mag_heading || 0) * 1 || 0;
-        selected.tas = (selected.tas || 0) * 1 || 0;
-        selected.gs = (selected.gs || 0) * 1 || 0;
-        var trk = (Math.PI / 180) * selected.track;
-        var hdg = (Math.PI / 180) * selected.mag_heading;
-        var ws = Math.round(Math.sqrt(Math.pow(selected.tas - selected.gs, 2) + 4 * selected.tas * selected.gs * Math.pow(Math.sin((hdg - trk) / 2), 2)));
-        var wd = trk + Math.atan2(selected.tas * Math.sin(hdg - trk), selected.tas * Math.cos(hdg - trk) - selected.gs);
-        if (wd < 0) {
-            wd = wd + 2 * Math.PI;
-        }
-        if (wd > 2 * Math.PI) {
-            wd = wd - 2 * Math.PI;
-        }
-        wd = Math.round((180 / Math.PI) * wd);
-        $('#selected_wind_speed').text(format_speed_long(ws, MapSettings.DisplayUnits));
-        $('#selected_wind_direction').text(format_track_long(wd));
-
-        $("#wind_arrow").show();
-        var C = Math.PI / 180;
-        var arrowx1 = 20 - 12 * Math.sin(C * wd);
-        var arrowx2 = 20 + 12 * Math.sin(C * wd);
-        var arrowy1 = 20 + 12 * Math.cos(C * wd);
-        var arrowy2 = 20 - 12 * Math.cos(C * wd);
-        $("#wind_arrow").attr('x1', arrowx1);
-        $("#wind_arrow").attr('x2', arrowx2);
-        $("#wind_arrow").attr('y1', arrowy1);
-        $("#wind_arrow").attr('y2', arrowy2);
-    } else {
-        $("#wind_arrow").hide();
-        $('#selected_wind_speed').text('n/a');
-        $('#selected_wind_direction').text('n/a');
     }
 }
 
