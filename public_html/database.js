@@ -89,7 +89,7 @@ Dump1090DB.indexedDB.open = function () {
 
 /* Preload aircraft operator database from online data */
 Dump1090DB.indexedDB.initOperators = function () {
-    $.ajax({ url: OnlineDatabaseUrl + 'db/operators.json',
+    $.ajax({ url: OnlineDatabaseUrl + 'db/my_operators.json',
             cache: false,
             timeout: 0,
             dataType : 'json' })
@@ -148,7 +148,7 @@ Dump1090DB.indexedDB.initTypes = function () {
 
 /* Preload aircrafts database from online data */
 Dump1090DB.indexedDB.initAircrafts = function () {
-        $.ajax({ url: OnlineDatabaseUrl + 'db/aircrafts.json',
+        $.ajax({ url: OnlineDatabaseUrl + 'db/my_aircrafts.json',
                 cache: false,
                 timeout: 0,
                 dataType : 'json' })
@@ -162,6 +162,7 @@ Dump1090DB.indexedDB.initAircrafts = function () {
                     "reg": element.r,
                     "type": element.t,
                     "flags": element.f,
+                    "operat": element.o,
                     "desc": element.d
                 };
                 var req = store.put(entry);
@@ -262,6 +263,16 @@ Dump1090DB.indexedDB.getAircraftData = function (plane) {
                         plane.interesting = true;
                         break;
                 }
+            }
+
+            if ("operat" in result) {
+                if (result.operat.length !== 3 )
+                    plane.operator = result.operat;
+                else if (plane.flight === null)
+                    plane.flight = result.operat + "0000";
+                Dump1090DB.indexedDB.getOperator(plane);
+                if ( plane.flight.substr(3,4) === "0000" || plane.flight === "0000")
+                    plane.flight = null;
             }
 
             if ("desc" in result) {
