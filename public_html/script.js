@@ -292,7 +292,7 @@ function initialize() {
                         MapSettings.VisibleLayers = {
                             'layer_site_pos': true,
                             'layer_ac_trail': true,
-                            'layer_ac_positions': true
+                            'layer_ac_positions': true,
                             'layer_Rnav_Way': false,
                             'layer_Low_Way': false,
                             'layer_circles': true,
@@ -512,6 +512,52 @@ function initialize_map() {
                 title: 'Selected aircraft trail',
                 source: new ol.source.Vector({
                     features: PlaneTrailFeatures,
+                })
+            }),
+
+           new ol.layer.Vector({
+                name: 'Rnav_Way',
+                type: 'overlay',
+                title: 'Rnav Routes & Points',
+                source: new ol.source.Vector({
+                    features: RnavWayFeatures,
+                })
+            }),
+
+            new ol.layer.Vector({
+                name: 'Low_Way',
+                type: 'overlay',
+
+                title: 'Low Routes & Points',
+                source: new ol.source.Vector({
+                    features: LowWayFeatures,
+                })
+            }),
+
+            new ol.layer.Vector({
+                name: 'circles',
+                type: 'overlay',
+                title: 'Airport Circles',
+                source: new ol.source.Vector({
+                    features: CircleFeatures,
+                })
+            }),
+
+            new ol.layer.Vector({
+                name: 'arrival',
+                type: 'overlay',
+                title: 'Arrival Points&Way',
+                source: new ol.source.Vector({
+                    features: ArrivalFeatures,
+                })
+            }),
+
+            new ol.layer.Vector({
+                name: 'departure',
+                type: 'overlay',
+                title: 'Departure Points&Way',
+                source: new ol.source.Vector({
+                    features: DepartureFeatures,
                 })
             }),
 
