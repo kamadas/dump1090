@@ -696,12 +696,12 @@ function initialize_map() {
                 if (popname === '~') {
                     var vsi = '';
                     if (Planes[feature.hex].vert_rate > 256) {
-                        vsi = 'climbing';
+                        vsi = '▲';
                     } else {
                         if (Planes[feature.hex].vert_rate < -256) {
-                            vsi = 'descending';
+                            vsi = '▼';
                         } else
-                            vsi = 'level';
+                            vsi = '−';
                     }
                     ;
 
@@ -720,11 +720,12 @@ function initialize_map() {
                         popname = popname + '\n' + (Planes[feature.hex].country ? Planes[feature.hex].country : '');
                         popname = popname + ' ' + (Planes[feature.hex].operator ? Planes[feature.hex].operator : '');
                     } else {
-                        popname = 'ICAO: ' + Planes[feature.hex].icao;
-                        popname = popname + '\nFlt:  ' + (Planes[feature.hex].flight ? Planes[feature.hex].flight : '?');
-                        popname = popname + '\nType: ' + (Planes[feature.hex].icaotype ? Planes[feature.hex].icaotype : '?');
-                        popname = popname + '\nReg:  ' + (Planes[feature.hex].registration ? Planes[feature.hex].registration : '?');
-                        popname = popname + '\nAlt:  ' + (Planes[feature.hex].altitude ? alt_text : '?');
+                        popname = 'Reg:   ' + (Planes[feature.hex].registration ? Planes[feature.hex].registration : '?');
+                        popname = popname + '\nCal:  ' + (Planes[feature.hex].callsign ? Planes[feature.hex].callsign : '?');
+                        popname = popname + '\nTyp:  ' + (Planes[feature.hex].typeDescription ? Planes[feature.hex].typeDescription : '?');
+                        popname = popname + '\nAlt:   ' + (Planes[feature.hex].altitude ? alt_text : '?') + ' ' + vsi;
+                        popname = popname + '\nSpd: ' + (Planes[feature.hex].gs ? Planes[feature.hex].gs : '?') + ' kt';
+                        popname = popname + '\nTrk: ' + (Planes[feature.hex].track ? Planes[feature.hex].track : '?') + '°';
                     }
                     overlay.getElement().innerHTML = (popname ? popname : '');
                     return feature;
