@@ -405,7 +405,20 @@ PlaneObject.prototype.updateIcon = function () {
 
         this.markerIcon = icon;
         this.markerStyle = new ol.style.Style({
-            image: this.markerIcon
+            image: this.markerIcon,
+            text: new ol.style.Text({
+                text: this.flight,
+                fill: new ol.style.Fill({
+                    color: 'black'
+                }),
+                textAlign: 'left',
+                offsetX: 16,
+                offsetY: -8,
+                padding: [5, 2, 5, 2],
+                backgroundFill: new ol.style.Fill({
+                   color: 'rgba(255, 255, 0, 0.8)'
+                })
+            })
         });
         this.markerStaticIcon = null;
         this.markerStaticStyle = new ol.style.Style({});
