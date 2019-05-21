@@ -1068,7 +1068,6 @@ function refreshSelected() {
 
     $('#selected_geom_rate').text(format_vert_rate_long(selected.geom_rate, MapSettings.DisplayUnits));
 
-
     if (selected.nav_qnh === null) {
         $('#selected_nav_qnh').text("n/a");
     } else {
