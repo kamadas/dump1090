@@ -9,6 +9,7 @@ Mictronics版dump1090の開発バージョンを自分用に改変したもの�
 * フライトナンバーをアイコンの横に表示します。（FL２４のiOSバージョンをイメージしています）
 ![Flight Number](https://github.com/kamadas/dump1090/blob/images/images/FlightNo.png)
 * rnavルートやLow-wayをマップ上に表示できます。（札幌管制区のみデータ入力済み）
+![All_Rnav_and_Low-way]((https://github.com/kamadas/dump1090/blob/images/images/All_Rnav_and_Low-way.png)
 * 空港到着ルート、出発ルートを表示できます。（北海道内のみデータ入力済み）
 * ラズベリーパイ公式７インチLCD用に表示項目を制限しています。
 * 無信号状態が続くとアイコンが北を向くのを改善しました。
