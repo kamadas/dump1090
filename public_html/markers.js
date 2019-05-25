@@ -133,6 +133,7 @@ var TypeDesignatorIcons = {
     'B712': 'jet_swept',
     'C560': 'jet_swept',
     'C650': 'jet_swept',
+    'C680': 'jet_swept',
     'C750': 'jet_swept',
     'E135': 'jet_swept',
     'E145': 'jet_swept',
