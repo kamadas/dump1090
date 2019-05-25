@@ -2,8 +2,8 @@ PROGNAME=dump1090
 DUMP1090_VERSION='Mictronics base v3.7.1'
 
 RTLSDR ?= yes
-BLADERF ?= yes
-PLUTOSDR ?= yes
+BLADERF ?= no
+PLUTOSDR ?= no
 AGGRESSIVE ?= no
 HAVE_BIASTEE ?= no
 
