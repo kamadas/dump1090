@@ -20,7 +20,8 @@ Mictronics版dump1090の開発バージョンを自分用に改変したもの�
 * データベースが重いので、軽量化しました。（特に北海道上空を通過する航空機データに特化しています）
 * MLAT機のコールサインを検索・表示する機能を追加しました。
 ![MLAT](https://github.com/kamadas/dump1090/blob/images/images/alfa-wing.png)
-* MLAT機のオペレータ表示機能を実装しました。（現在デバッグ中）
+* MLAT機のオペレータ表示機能を実装しました。
+![Private](https://github.com/kamadas/dump1090/blob/images/images/Operator\(Private\).png)
 
 ## TODO
 
