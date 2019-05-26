@@ -415,9 +415,9 @@ PlaneObject.prototype.updateIcon = function () {
                 textAlign: 'left',
                 offsetX: 16,
                 offsetY: -8,
-                padding: [5, 2, 5, 2],
+                padding: [2, 2, 2, 2],
                 backgroundFill: new ol.style.Fill({
-                   color: 'rgba(255, 255, 0, 0.8)'
+                   color: 'rgba(252, 247, 0, 0.6)'
                 })
             })
         });
