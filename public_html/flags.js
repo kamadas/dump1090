@@ -1,7 +1,7 @@
 "use strict";
 
 // Declare ICAO registration address ranges and country
-// install the flag images in flags-tiny subdirectory. 
+// install the flag images in flags-tiny subdirectory.
 
 var ICAO_Ranges = [
         // Mostly generated from the assignment table in the appendix to Chapter 9 of
@@ -159,7 +159,7 @@ var ICAO_Ranges = [
         { start: 0x768000, end: 0x76FFFF, country: "Singapore", flag_image: "Singapore.png" },
         { start: 0x505C00, end: 0x505FFF, country: "Slovakia", flag_image: "Slovakia.png" },
         { start: 0x506C00, end: 0x506FFF, country: "Slovenia", flag_image: "Slovenia.png" },
-        { start: 0x897000, end: 0x8973FF, country: "Solomon Islands", flag_image: "Soloman_Islands.png" }, // flag typo?
+        { start: 0x897000, end: 0x8973FF, country: "Solomon Islands", flag_image: "Solomon_Islands.png" },
         { start: 0x078000, end: 0x078FFF, country: "Somalia", flag_image: "Somalia.png" },
         { start: 0x008000, end: 0x00FFFF, country: "South Africa", flag_image: "South_Africa.png" },
         { start: 0x340000, end: 0x37FFFF, country: "Spain", flag_image: "Spain.png" },
@@ -170,6 +170,7 @@ var ICAO_Ranges = [
         { start: 0x4A8000, end: 0x4AFFFF, country: "Sweden", flag_image: "Sweden.png" },
         { start: 0x4B0000, end: 0x4B7FFF, country: "Switzerland", flag_image: "Switzerland.png" },
         { start: 0x778000, end: 0x77FFFF, country: "Syrian Arab Republic", flag_image: "Syria.png" },
+        { start: 0x899000, end: 0x8993FF, country: "Taiwan", flag_image: "Taiwan.png" },
         { start: 0x515000, end: 0x5153FF, country: "Tajikistan", flag_image: "Tajikistan.png" },
         { start: 0x880000, end: 0x887FFF, country: "Thailand", flag_image: "Thailand.png" },
         { start: 0x512000, end: 0x5123FF, country: "The former Yugoslav Republic of Macedonia", flag_image: "Macedonia.png" },
@@ -195,7 +196,6 @@ var ICAO_Ranges = [
         { start: 0x004000, end: 0x0043FF, country: "Zimbabwe", flag_image: "Zimbabwe.png" },
 
         { start: 0xF00000, end: 0xF07FFF, country: "ICAO (temporary assignments)", flag_image: "blank.png" },
-        { start: 0x899000, end: 0x8993FF, country: "ICAO (special use)", flag_image: "blank.png" },
         { start: 0xF09000, end: 0xF093FF, country: "ICAO (special use)", flag_image: "blank.png" },
 
         // Block assignments mentioned in Chapter 9 section 4, at the end so they are only used if
