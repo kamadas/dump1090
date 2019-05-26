@@ -236,15 +236,15 @@ var TypeDescriptionIcons = {
     'H1P': 'helicopter',
     'H2P': 'helicopter',
     'L1P': 'cessna',
-    'L1T': 'cessna'
+    'L1T': 'cessna',
     'L1J': 'hi_perf',
     'L2T': 'twin_small',
     'L2P': 'twin_large',
     'L2J-L': 'jet_swept',
     'L2J-M': 'airliner',
     'L2J-H': 'heavy_2e',
-    'L3J': "",		//Could sombody draw an Icon?
-    'L3P': "",		//Couls sombody draw an Icon?
+    'L3J': '',		//Could sombody draw an Icon?
+    'L3P': '',		//Couls sombody draw an Icon?
     'L4T': 'heavy_4e',
     'L4J': 'heavy_4e'
 };
