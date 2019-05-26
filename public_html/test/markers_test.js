@@ -5,6 +5,7 @@ var NextLon = 0;
 var NextLat = 0;
 
 function setup_markers_test() {
+    var Marker;
         MarkerLayer = new ol.layer.Vector({
                 source: new ol.source.Vector(),
         });
@@ -25,31 +26,33 @@ function setup_markers_test() {
         });
 
         for (var type in TypeDesignatorIcons) {
-                add_marker(type, TypeDesignatorIcons[type]);
+//                var Marker = getBaseMarker(null, TypeDesignatorIcons[type], null, null);
+                Marker = getBaseMarker(null, type, null, null);
+                add_marker(type, Marker);
         }
 
         for (var type in TypeDescriptionIcons) {
-                add_marker(type, TypeDescriptionIcons[type]);
+                Marker = getBaseMarker(null, null, type, null);
+                add_marker(type, Marker);
         }
 
         for (var category in CategoryIcons) {
-                add_marker("Cat " + category, CategoryIcons[category]);
+                Marker = getBaseMarker(category, null, null, null);
+                add_marker("Cat " + category, Marker);
         }
 
-        add_marker("Default", DefaultIcon);
 
         map.getView().setCenter(ol.proj.fromLonLat([5, NextLat/2]));
 }
 
 function add_marker(title, baseMarker) {
-        var weight = (1 / baseMarker.scale).toFixed(1);
         var icon = new ol.style.Icon({
-                anchor: baseMarker.anchor,
+                anchor: [0.5, 0.5],
                 anchorXUnits: 'pixels',
                 anchorYUnits: 'pixels',
-                scale: baseMarker.scale,
-                imgSize: baseMarker.size,
-                src: svgPathToURI(baseMarker.path, baseMarker.size, '#000000', weight, '#00C000'),
+                scale: 1.2,
+//                imgSize: baseMarker.size,
+                src: svgPathToURI(baseMarker.svg, '#000000', '#00C000', 'stroke="#00C000" stroke-width="1px"'),
                 rotation: 0,
                 opacity: 1.0,
                 rotateWithView: (baseMarker.noRotate ? false : true)
