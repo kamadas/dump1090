@@ -23,7 +23,7 @@ var Filter;
 (function(Filter) {
     Filter.isEnabled = false;
     Filter.isHighlight = false;
-    
+
     Filter.AircraftFilter = {
         Altitude:       'alt',
         Ident:          'idn',
@@ -41,14 +41,14 @@ var Filter;
         UserInterested: 'int',
         Wtc:            'wtc'
     };
-    
+
     Filter.FilterType = {
         OnOff:          0,
         TextMatch:      1,
         NumberRange:    2,
         EnumMatch:      3
     };
-    
+
     Filter.InputWidth = {
         Auto: '',
         OneChar: 'oneChar',
@@ -58,7 +58,7 @@ var Filter;
         NineChar: 'nineChar',
         Long: 'wide'
     };
-    
+
     Filter.Species = {
         None: 0,
         LandPlane: 1,
@@ -70,14 +70,14 @@ var Filter;
         GroundVehicle: 7,
         Tower: 8
     };
-    
+
     Filter.WakeTurbulenceCategory = {
         None: 0,
         Light: 1,
         Medium: 2,
         Heavy: 3
     };
-       
+
     Filter.Condition = {
         Equals: 0,
         NotEquals: 1,
@@ -90,7 +90,7 @@ var Filter;
         Ends: 8,
         NotEnds: 9
     };
-    
+
     Filter.ValueText = (function () {
         function ValueText(settings) {
             this.value = settings.value;
@@ -98,8 +98,8 @@ var Filter;
             this.selected = false;
         }
         return ValueText;
-    }());    
-    
+    }());
+
     Filter.ConditionList = [
         new Filter.ValueText({value: Filter.Condition.Equals, text: "equals"}),
         new Filter.ValueText({value: Filter.Condition.NotEquals, text: "not equals"}),
@@ -112,7 +112,7 @@ var Filter;
         new Filter.ValueText({value: Filter.Condition.Ends, text: "ends with"}),
         new Filter.ValueText({value: Filter.Condition.NotEnds, text: "ends not with"})
     ];
-    
+
     var AircraftFilterHandler = (function () {
         function AircraftFilterHandler(settings) {
             $.extend(this, settings);
@@ -145,9 +145,9 @@ var Filter;
                 var a = convert_altitude(aircraft.altitude, MapSettings.DisplayUnits);
                 if(a >= this.value1 && a <= this.value2) f = false;
                 if(this.condition === Filter.Condition.NotBetween) f = !f;
-                return f;                
+                return f;
             }
-            return false; 
+            return false;
         },
         validate: function(){
             this.value1 = Filter.validateNumber(this.value1, this.minimumValue, this.maximumValue);
@@ -160,14 +160,14 @@ var Filter;
             }
         }
     });
-    
+
     Filter.aircraftFilterHandlers[Filter.AircraftFilter.Ident] = new Filter.AircraftFilterHandler({
         property: Filter.AircraftFilter.Ident,
         type: Filter.FilterType.TextMatch,
         label: 'Ident',
         inputWidth: Filter.InputWidth.SixChar,
         condition: Filter.Condition.Contains,
-        getFilterConditions: 
+        getFilterConditions:
              [ Filter.Condition.Equals,
                Filter.Condition.NotEquals,
                Filter.Condition.Contains,
@@ -179,23 +179,22 @@ var Filter;
              ],
         isFiltered: function(aircraft){
             if(this.isActive && this.value1 !== undefined){
-                return Filter.filterText(aircraft.flight, this.value1, this.condition);                
+                return Filter.filterText(aircraft.flight, this.value1, this.condition);
             }
-            return false; 
+            return false;
         },
         validate: function(){
             var s = this.value1.trim().substr(0,7).toUpperCase();
             this.value1 = s.replace(/[^0-9A-Z]/, "");
         }
     });
-    
     Filter.aircraftFilterHandlers[Filter.AircraftFilter.Country] = new Filter.AircraftFilterHandler({
         property: Filter.AircraftFilter.Country,
         type: Filter.FilterType.TextMatch,
         label: 'Country',
         inputWidth: Filter.InputWidth.Long,
         condition: Filter.Condition.Contains,
-        getFilterConditions: 
+        getFilterConditions:
              [ Filter.Condition.Equals,
                Filter.Condition.NotEquals,
                Filter.Condition.Contains,
@@ -208,15 +207,15 @@ var Filter;
         isFiltered: function(aircraft){
             if(this.isActive && aircraft.icao !== null && this.value1 !== undefined){
                 var f = findICAORange(aircraft.icao);
-                return Filter.filterText(f.country, this.value1, this.condition);                
+                return Filter.filterText(f.country, this.value1, this.condition);
             }
-            return false; 
+            return false;
         },
         validate: function(){
             this.value1 = this.value1.trim().substr(0,30);
         }
     });
-    
+
     Filter.aircraftFilterHandlers[Filter.AircraftFilter.Distance] = new Filter.AircraftFilterHandler({
         property: Filter.AircraftFilter.Distance,
         type: Filter.FilterType.NumberRange,
@@ -234,9 +233,9 @@ var Filter;
                 var s = convert_distance(aircraft.sitedist, MapSettings.DisplayUnits);
                 if(s >= this.value1 && s <= this.value2) f = false;
                 if(this.condition === Filter.Condition.NotBetween) f = !f;
-                return f;                
+                return f;
             }
-            return false; 
+            return false;
         },
         validate: function(){
             this.value1 = Filter.validateNumber(this.value1, this.minimumValue, this.maximumValue);
@@ -262,13 +261,13 @@ var Filter;
                 else
                     return !aircraft.civilmil;
             }
-            return false; 
+            return false;
         },
         validate: function(){
             return this.value1;
         }
     });
-    
+
     Filter.aircraftFilterHandlers[Filter.AircraftFilter.UserInterested] = new Filter.AircraftFilterHandler({
         property: Filter.AircraftFilter.UserInterested,
         type: Filter.FilterType.OnOff,
@@ -282,13 +281,13 @@ var Filter;
                 else
                     return !aircraft.interesting;
             }
-            return false; 
+            return false;
         },
         validate: function(){
             return this.value1;
         }
     });
-    
+
     Filter.aircraftFilterHandlers[Filter.AircraftFilter.HideNoPosition] = new Filter.AircraftFilterHandler({
         property: Filter.AircraftFilter.HideNoPosition,
         type: Filter.FilterType.OnOff,
@@ -298,20 +297,20 @@ var Filter;
             if(this.isActive && aircraft.position === null && this.value1){
                 return true;
             }
-            return false; 
+            return false;
         },
         validate: function(){
             return this.value1;
         }
     });
-    
+
     Filter.aircraftFilterHandlers[Filter.AircraftFilter.Icao] = new Filter.AircraftFilterHandler({
         property: Filter.AircraftFilter.Icao,
         type: Filter.FilterType.TextMatch,
         label: 'Icao',
         inputWidth: Filter.InputWidth.SixChar,
         condition: Filter.Condition.Contains,
-        getFilterConditions: 
+        getFilterConditions:
              [ Filter.Condition.Equals,
                Filter.Condition.NotEquals,
                Filter.Condition.Contains,
@@ -325,21 +324,21 @@ var Filter;
             if(this.isActive && this.value1 !== undefined){
                 return Filter.filterText(aircraft.icao, this.value1, this.condition); 
             }
-            return false; 
+            return false;
         },
         validate: function(){
             var s = this.value1.trim().substr(0,6).toUpperCase();
             this.value1 = s.replace(/[^0-9A-F]/, "");
         }
     });
-    
+
     Filter.aircraftFilterHandlers[Filter.AircraftFilter.TypeIcao] = new Filter.AircraftFilterHandler({
         property: Filter.AircraftFilter.TypeIcao,
         type: Filter.FilterType.TextMatch,
         label: 'Type Icao',
         inputWidth: Filter.InputWidth.SixChar,
         condition: Filter.Condition.Contains,
-        getFilterConditions: 
+        getFilterConditions:
              [ Filter.Condition.Equals,
                Filter.Condition.NotEquals,
                Filter.Condition.Contains,
@@ -353,21 +352,21 @@ var Filter;
             if(this.isActive && this.value1 !== undefined){
                 return Filter.filterText(aircraft.icaotype, this.value1, this.condition); 
             }
-            return false; 
+            return false;
         },
         validate: function(){
             var s = this.value1.trim().substr(0,4).toUpperCase();
             this.value1 = s.replace(/[^0-9A-Z]/, "");
         }
     });
-    
+
     Filter.aircraftFilterHandlers[Filter.AircraftFilter.Operator] = new Filter.AircraftFilterHandler({
         property: Filter.AircraftFilter.Operator,
         type: Filter.FilterType.TextMatch,
         label: 'Operator',
         inputWidth: Filter.InputWidth.Long,
         condition: Filter.Condition.Contains,
-        getFilterConditions: 
+        getFilterConditions:
              [ Filter.Condition.Equals,
                Filter.Condition.NotEquals,
                Filter.Condition.Contains,
@@ -379,22 +378,22 @@ var Filter;
              ],
         isFiltered: function(aircraft){
             if(this.isActive && this.value1 !== undefined){
-                return Filter.filterText(aircraft.operator, this.value1, this.condition);                 
+                return Filter.filterText(aircraft.operator, this.value1, this.condition);
             }
-            return false; 
+            return false;
         },
         validate: function(){
             this.value1 = this.value1.trim().substr(0,30);
         }
     });
-    
+
     Filter.aircraftFilterHandlers[Filter.AircraftFilter.OperatorCode] = new Filter.AircraftFilterHandler({
         property: Filter.AircraftFilter.OperatorCode,
         type: Filter.FilterType.TextMatch,
         label: 'Operator Code',
         inputWidth: Filter.InputWidth.ThreeChar,
         condition: Filter.Condition.Equals,
-        getFilterConditions: 
+        getFilterConditions:
              [ Filter.Condition.Equals,
                Filter.Condition.NotEquals
              ],
@@ -407,21 +406,21 @@ var Filter;
                 if(this.condition === Filter.Condition.NotEquals) f = !f;
                 return f;
             }
-            return false; 
+            return false;
         },
         validate: function(){
             var s = this.value1.trim().substr(0,3).toUpperCase();
             this.value1 = s.replace(/[^0-9A-Z]/, "");
         }
     });
-    
+
     Filter.aircraftFilterHandlers[Filter.AircraftFilter.Registration] = new Filter.AircraftFilterHandler({
         property: Filter.AircraftFilter.Registration,
         type: Filter.FilterType.TextMatch,
         label: 'Registration',
         inputWidth: Filter.InputWidth.NineChar,
         condition: Filter.Condition.Contains,
-        getFilterConditions: 
+        getFilterConditions:
              [ Filter.Condition.Equals,
                Filter.Condition.NotEquals,
                Filter.Condition.Contains,
@@ -436,23 +435,23 @@ var Filter;
                 var r = aircraft.registration;
                 if(r !== null && r.startsWith("#"))
                     r = r.substr(2); // Remove DB entry marker if exists
-                return Filter.filterText(r, this.value1, this.condition);     
+                return Filter.filterText(r, this.value1, this.condition);
             }
-            return false; 
+            return false;
         },
         validate: function(){
             var s = this.value1.trim().substr(0,10).toUpperCase();
             this.value1 = s.replace(/[^0-9A-Z-+]/, "");
         }
     });
-    
+
     Filter.aircraftFilterHandlers[Filter.AircraftFilter.Species] = new Filter.AircraftFilterHandler({
         property: Filter.AircraftFilter.Species,
         type: Filter.FilterType.EnumMatch,
         label: 'Species',
         condition: Filter.Condition.Equals,
         getFilterConditions: [Filter.Condition.Equals, Filter.Condition.NotEquals],
-        getEnumValues: 
+        getEnumValues:
             [
                 new Filter.ValueText({ value: Filter.Species.None, text: 'None' }),
                 new Filter.ValueText({ value: Filter.Species.LandPlane, text: 'Land Plane' }),
@@ -474,16 +473,16 @@ var Filter;
                         break;
                     case Filter.Species.SeaPlane:
                         if(s === 'S') f = false;
-                        break; 
+                        break;
                     case Filter.Species.Amphibian:
                         if(s === 'A') f = false;
-                        break;                            
+                        break;
                     case Filter.Species.Helicopter:
                         if(s === 'H') f = false;
-                        break;                     
+                        break;
                     case Filter.Species.Gyrocopter:
                         if(s === 'G') f = false;
-                        break;                     
+                        break;
                     case Filter.Species.Tiltwing:
                         if(s === 'T') f = false;
                         break;
@@ -493,7 +492,7 @@ var Filter;
                 if(this.condition === Filter.Condition.NotEquals) f = !f;
                 return f;
             }
-            return false;                 
+            return false;
         },
         validate: function(){
             this.value1 = Number(this.value1);
@@ -503,7 +502,7 @@ var Filter;
                 this.value1 = Filter.Species.Tower;
         }
     });
-    
+
     Filter.aircraftFilterHandlers[Filter.AircraftFilter.Squawk] = new Filter.AircraftFilterHandler({
         property: Filter.AircraftFilter.Squawk,
         type: Filter.FilterType.NumberRange,
@@ -521,23 +520,23 @@ var Filter;
                 var s = Number(aircraft.squawk);
                 if(s >= this.value1 && s <= this.value2) f = false;
                 if(this.condition === Filter.Condition.NotBetween) f = !f;
-                return f;                
+                return f;
             }
-            return false; 
+            return false;
         },
         validate: function(){
             this.value1 = Filter.validateNumber(this.value1, this.minimumValue, this.maximumValue);
             this.value2 = Filter.validateNumber(this.value2, this.minimumValue, this.maximumValue);
         }
     });
-    
+
     Filter.aircraftFilterHandlers[Filter.AircraftFilter.Wtc] = new Filter.AircraftFilterHandler({
         property: Filter.AircraftFilter.Wtc,
         type: Filter.FilterType.EnumMatch,
         label: 'Wake Turbulence',
         condition: Filter.Condition.Equals,
         getFilterConditions: [Filter.Condition.Equals, Filter.Condition.NotEquals],
-        getEnumValues: 
+        getEnumValues:
             [
                 new Filter.ValueText({ value: Filter.WakeTurbulenceCategory.None, text: 'None' }),
                 new Filter.ValueText({ value: Filter.WakeTurbulenceCategory.Light, text: 'Light' }),
@@ -564,7 +563,7 @@ var Filter;
                 if(this.condition === Filter.Condition.NotEquals) f = !f;
                 return f;
             }
-            return false; 
+            return false;
         },
         validate: function(){
             this.value1 = Number(this.value1);
@@ -574,7 +573,7 @@ var Filter;
                 this.value1 = Filter.WakeTurbulenceCategory.Heavy;
         }
     });
-  
+
 })(Filter || (Filter = {}));
 
 /* Validate a number from user input */
@@ -594,23 +593,23 @@ Filter.filterText = function(haystack, needle, condition){
     if(haystack === null) return true;
     var h = haystack.trim().toUpperCase();
     var n = needle.trim().toUpperCase();
-    switch(condition){    
+    switch(condition){
         case Filter.Condition.Equals:
             if(h === n) return false;
             break;
-            
+
         case Filter.Condition.NotEquals:
             if(h !== n) return false;
             break;
-        
+
         case Filter.Condition.Contains:
             if(h.search(n) !== -1) return false;
             break;
-            
+
         case Filter.Condition.NotContains:
             if(h.search(n) === -1) return false;
             break;
-            
+
         case Filter.Condition.Starts:
             return !h.startsWith(n);
 
@@ -635,7 +634,7 @@ function initializeFilters() {
         var m = "<option value=\""+key+"\">"+Filter.aircraftFilterHandlers[key].label+"</option>\n";
         $("#filter_selector").append(m);
     }
-   
+
     $("#enable_filter_checkbox").checkboxradio({ icon: false });
     $("#enable_filter_checkbox").prop('checked', Filter.isEnabled).checkboxradio("refresh");
     $("#enable_filter_checkbox").on("change", function(){
@@ -663,14 +662,14 @@ function initializeFilters() {
 function onFilterAddClick(e) {
     var key = $("#filter_selector").val();
     addFilterListEntry(key, null, "", "");
-};    
+};
 
 /* Add new filter entry to the list */
 function addFilterListEntry(key, condition, v1, v2){
     var filterHandler = Filter.aircraftFilterHandlers[key];
     $("#filter_list").append("<li></li>");
     var filterListEntry = $( "#filter_list li:last-of-type" );
-    
+
     filterListEntry.append('<span class="short">'+filterHandler.label+'</span>');
     /* Create condition list*/
     var l = filterHandler.getFilterConditions.length;
@@ -686,7 +685,7 @@ function addFilterListEntry(key, condition, v1, v2){
         else
             c.val(filterHandler.condition);
     }
-    
+
     /* Create input mask depending on filter type */
     switch(filterHandler.type){
         case Filter.FilterType.OnOff:
@@ -716,11 +715,11 @@ function addFilterListEntry(key, condition, v1, v2){
             }
             if(v1 !== null)
                 c.val(v1);
-            break;            
+            break;
         default:
             break;
     }
-    
+
     filterListEntry.append('<button class="ui-button ui-widget ui-corner-all ui-button-icon-only" role="button" value="'+key+'">'+
                            '<span class="ui-icon ui-icon-trash"></span>'+
                            '</button>');
@@ -733,7 +732,7 @@ function addFilterListEntry(key, condition, v1, v2){
 /* Prevent adding a filter that is already in the list */
 function onFilterSelectorClose(e){
     /* Each filter can be added only once */
-    var filterHandler = Filter.aircraftFilterHandlers[e.target.value];    
+    var filterHandler = Filter.aircraftFilterHandlers[e.target.value];
     if(filterHandler.isActive === true) {
         $("#filter_add_button").button( "option", "disabled", true );
     } else {
@@ -784,7 +783,7 @@ function onFilterChange(e){
         default:
             break;
     }
-    
+
     /* Save filter settings to indexedDB */
     if(filterHandler !== undefined){
         var f = {
@@ -812,7 +811,7 @@ function refreshFilterList(){
             $(this).children("#input_value1").val(filterHandler.value1.toFixed(filterHandler.decimalPlaces));
             $(this).children("#input_value2").val(filterHandler.value2.toFixed(filterHandler.decimalPlaces));
         }
-    });    
+    });
 }
 
 /* Restore filters from last session */
