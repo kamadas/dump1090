@@ -233,7 +233,6 @@ var TypeDescriptionIcons = {
     'H': 'helicopter',
     'H1T': 'helicopter',
     'H2T': 'helicopter',
-    'H3T': 'helicopter',
     'H1P': 'helicopter',
     'H2P': 'helicopter',
     'L1P': 'cessna',
@@ -244,8 +243,10 @@ var TypeDescriptionIcons = {
     'L2J-L': 'jet_swept',
     'L2J-M': 'airliner',
     'L2J-H': 'heavy_2e',
+    'L3J': "",
+    'L3P': "",
     'L4T': 'heavy_4e',
-    'L4J-H': 'heavy_4e'
+    'L4J': 'heavy_4e'
 };
 
 var CategoryIcons = {
