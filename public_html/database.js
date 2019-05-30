@@ -266,13 +266,14 @@ Dump1090DB.indexedDB.getAircraftData = function (plane) {
             }
 
             if ("operat" in result) {
-                if (result.operat.length !== 3 )
+                if (result.operat.length !== 3 ) {
                     plane.operator = result.operat;
-                else if (plane.flight === null)
+                } else if (plane.flight === null) {
                     plane.flight = result.operat + "0000";
-                Dump1090DB.indexedDB.getOperator(plane);
-                if ( plane.flight.substr(3,4) === "0000" || plane.flight === "0000")
+                    Dump1090DB.indexedDB.getOperator(plane);
+//                if ( plane.flight.substr(3,4) === "0000" || plane.flight === "0000")
                     plane.flight = null;
+                }
             }
 
             if ("desc" in result) {
