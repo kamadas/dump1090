@@ -26,13 +26,17 @@ function setup_markers_test() {
         });
 
         for (var type in TypeDesignatorIcons) {
-//                var Marker = getBaseMarker(null, TypeDesignatorIcons[type], null, null);
                 Marker = getBaseMarker(null, type, null, null);
                 add_marker(type, Marker);
         }
 
         for (var type in TypeDescriptionIcons) {
-                Marker = getBaseMarker(null, null, type, null);
+                if ( type.length === 5 ) {
+                    var types = type.substr(0, 3);
+                    var wtc = type.substr(4, 1);
+                    Marker = getBaseMarker(null, null, types, wtc);
+                } else
+                    Marker = getBaseMarker(null, null, type, null);
                 add_marker(type, Marker);
         }
 
