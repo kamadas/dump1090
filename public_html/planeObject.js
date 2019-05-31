@@ -405,10 +405,13 @@ PlaneObject.prototype.updateIcon = function () {
         });
 
         this.markerIcon = icon;
+        var flightno = this.flight;
+        if ( flightno !== null )
+            flightno = this.flight.trim();
         this.markerStyle = new ol.style.Style({
             image: this.markerIcon,
             text: new ol.style.Text({
-                text: this.flight.trim(),
+                text: flightno,
                 fill: new ol.style.Fill({
                     color: 'black'
                 }),
