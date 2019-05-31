@@ -78,49 +78,6 @@ var shapes = {
 }
 
 var TypeDesignatorIcons = {
-    'A318': 'airliner', // shortened a320
-    'A319': 'airliner', // shortened a320
-    'A320': 'airliner',
-    'A321': 'airliner', // stretched a320
-    'A20N': 'airliner',
-    'A21N': 'airliner',
-    'A332': 'airliner',
-    'A333': 'airliner',
-    'A343': 'airliner',
-    'A359': 'airliner',
-    'A35K': 'airliner',
-    'A388': 'heavy_4e',
-    // dubious since these are old-generation 737s
-    // but the shape is similar
-    'A124': 'heavy_4e',
-    'B731': 'airliner',
-    'B732': 'airliner',
-    'B733': 'airliner',
-    'B734': 'airliner',
-    'B735': 'airliner',
-    // these probably need reworking
-    // since they vary in length
-    'B736': 'airliner',
-    'B737': 'airliner',
-    'B738': 'airliner',
-    'B739': 'airliner',
-    'B741': 'heavy_4e',
-    'B742': 'heavy_4e',
-    'B743': 'heavy_4e',
-    'B744': 'heavy_4e',
-    'B74D': 'heavy_4e',
-    'B74S': 'heavy_4e',
-    'B74R': 'heavy_4e',
-    'BLCF': 'heavy_2e',
-    'BSCA': 'heavy_4e', // hah!
-    'B748': 'heavy_4e',
-    'B763': 'heavy_2e',
-    'B772': 'heavy_2e', // all pretty similar except for length
-    'B77W': 'heavy_2e',
-    'B773': 'heavy_2e',
-    'B77L': 'heavy_2e',
-    'B788': 'heavy_2e',
-    'B789': 'heavy_2e',
     'DH8A': 'dh8',
     'DH8B': 'dh8',
     'DH8C': 'dh8',
@@ -215,11 +172,7 @@ var TypeDesignatorIcons = {
     'VAUT': 'hi_perf',
     'WB57': 'hi_perf',
     'Y130': 'hi_perf',
-    'YK28': 'hi_perf',
-    // 'BE20': _b200,
-
-    // 'C130': _c130,
-    // 'C30J': _c130
+    'YK28': 'hi_perf'
 };
 
 // Maps ICAO aircraft type description codes (e.g. "L2J") to aircraft icons. This is used if the ICAO type designator (e.g. "B731")
@@ -230,7 +183,7 @@ var TypeDesignatorIcons = {
 //     a dash (e.g. "L2J-M").
 
 var TypeDescriptionIcons = {
-    'H': 'helicopter',
+//    'H': 'helicopter',
     'H1T': 'helicopter',
     'H2T': 'helicopter',
     'H1P': 'helicopter',
