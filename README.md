@@ -7,7 +7,7 @@ This is a fork of [Mictronics dump1090](https://github.com/Mictronics/dump1090).
 Mictronics版dump1090のdevブランチを自分用に改変したものです。
 
 * フライトナンバーをアイコンの横に表示します。（FL24のiOSバージョンをイメージしています）
-![Flight Number](https://github.com/kamadas/dump1090/blob/images/images/FlightNo.png)
+![Flight Number](https://github.com/kamadas/dump1090/blob/images/images/FlightNo3.png)
 * rnavルートやLow-wayをマップ上に表示できます。（札幌管制区のみデータ入力済み）
 ![All_Rnav_and_Low-way](https://github.com/kamadas/dump1090/blob/images/images/All_Rnav_and_Low-way.png)
 * 空港到着ルート、出発ルートを表示できます。（北海道内のみデータ入力済み）
