@@ -408,7 +408,7 @@ PlaneObject.prototype.updateIcon = function () {
         this.markerStyle = new ol.style.Style({
             image: this.markerIcon,
             text: new ol.style.Text({
-                text: this.flight,
+                text: this.flight.trim(),
                 fill: new ol.style.Fill({
                     color: 'black'
                 }),
