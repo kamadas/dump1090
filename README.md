@@ -6,7 +6,7 @@ This is a fork of [Mictronics dump1090](https://github.com/Mictronics/dump1090).
 
 Mictronics版dump1090のdevブランチを自分用に改変したものです。
 
-* フライトナンバーをアイコンの横に表示します。（FL24のiOSバージョンをイメージしています）
+* フライトナンバーをアイコンの横に表示します。（FR24のiOSバージョンをイメージしています）
 ![Flight Number](https://github.com/kamadas/dump1090/blob/images/images/FlightNo3.png)
 * rnavルートやLow-wayをマップ上に表示できます。（札幌管制区のみデータ入力済み）
 ![All_Rnav_and_Low-way](https://github.com/kamadas/dump1090/blob/images/images/All_Rnav_and_Low-way.png)
@@ -21,7 +21,8 @@ Mictronics版dump1090のdevブランチを自分用に改変したものです�
 * MLAT機のコールサインを検索・表示する機能を追加しました。
 ![MLAT](https://github.com/kamadas/dump1090/blob/images/images/alfa-wing.png)
 * MLAT機のオペレータ表示機能を実装しました。
-![Private](https://github.com/kamadas/dump1090/blob/images/images/Operator\(Private\).png)
+![Operator1](https://github.com/kamadas/dump1090/blob/images/images/Operator1.png)
+![Operator2](https://github.com/kamadas/dump1090/blob/images/images/Operator2.png)
 
 ## TODO
 
