@@ -21,8 +21,8 @@ Mictronics版dump1090のdevブランチを自分用に改変したものです�
 * MLAT機のコールサインを検索・表示する機能を追加しました。
 ![MLAT](https://github.com/kamadas/dump1090/blob/images/images/alfa-wing.png)
 * MLAT機のオペレータ表示機能を実装しました。
-![Operator1](https://github.com/kamadas/dump1090/blob/images/images/Operator1.png)
-![Operator2](https://github.com/kamadas/dump1090/blob/images/images/Operator2.png)
+![Operator1](https://github.com/kamadas/dump1090/blob/images/images/operator1.png)
+![Operator2](https://github.com/kamadas/dump1090/blob/images/images/operator2.png)
 
 ## TODO
 
