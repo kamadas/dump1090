@@ -184,6 +184,18 @@ Dump1090DB.indexedDB.getOperator = function (plane) {
     var store = trans.objectStore("Operators");
     var index = store.index("id");
     var req = index.get(plane.flight.substring(0, 3));
+    var req2 = index.get(plane.flight.substring(0, 2));
+
+    req2.onsuccess = function (e) {
+        var result = e.target.result;
+        if (result !== undefined) {
+            if ("radio" in result)
+                plane.callsign = result.radio;
+            if ("name" in result)
+                plane.operator = result.name;
+        }
+    };
+    req2.onerror = Dump1090DB.indexedDB.onerror;
 
     req.onsuccess = function (e) {
         var result = e.target.result;
