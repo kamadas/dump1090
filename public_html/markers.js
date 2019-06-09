@@ -183,7 +183,6 @@ var TypeDesignatorIcons = {
 //     a dash (e.g. "L2J-M").
 
 var TypeDescriptionIcons = {
-//    'H': 'helicopter',
     'H1T': 'helicopter',
     'H2T': 'helicopter',
     'H1P': 'helicopter',
