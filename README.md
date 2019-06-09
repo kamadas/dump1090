@@ -23,7 +23,7 @@ Mictronics版dump1090のdevブランチを自分用に改変したものです�
 * MLAT機のオペレータ表示機能を実装しました。
 ![Operator1](https://github.com/kamadas/dump1090/blob/images/images/operator1.png)
 ![Operator2](https://github.com/kamadas/dump1090/blob/images/images/operator2.png)
-* オペレータ表示機能を JL,IJ,FW などのIATAコードにも対応するように変更しました。
+* オペレータ表示機能を JL,IJ,FW などのIATAコードに一部対応するように変更しました。
 ![Operator3](https://github.com/kamadas/dump1090/blob/images/images/fw.png)
 
 ## TODO
