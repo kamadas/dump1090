@@ -408,22 +408,29 @@ PlaneObject.prototype.updateIcon = function () {
         var flightno = this.flight;
         if ( flightno !== null )
             flightno = this.flight.trim();
-        this.markerStyle = new ol.style.Style({
-            image: this.markerIcon,
-            text: new ol.style.Text({
-                text: flightno,
-                fill: new ol.style.Fill({
-                    color: 'black'
-                }),
-                textAlign: 'left',
-                offsetX: 16,
-                offsetY: -8,
-                padding: [2, 2, 2, 2],
-                backgroundFill: new ol.style.Fill({
-                   color: 'rgba(252, 247, 0, 0.6)'
+        if ( MapSettings.ZoomLvl > 6 ) {
+            this.markerStyle = new ol.style.Style({
+                image: this.markerIcon,
+                text: new ol.style.Text({
+                    text: flightno,
+                    fill: new ol.style.Fill({
+                        color: 'black'
+                    }),
+                    textAlign: 'left',
+                    offsetX: 16,
+                    offsetY: -8,
+                    padding: [2, 2, 2, 2],
+                    backgroundFill: new ol.style.Fill({
+                        color: 'rgba(252, 247, 0, 0.4)'
+                    })
                 })
-            })
-        });
+            });
+        } else {
+            this.markerStyle = new ol.style.Style({
+                image: this.markerIcon
+            });
+        };
+
         this.markerStaticIcon = null;
         this.markerStaticStyle = new ol.style.Style({});
 
