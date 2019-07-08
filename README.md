@@ -28,6 +28,8 @@ This is a modification of the dev branch of Mictronics version dump1090 for my o
 * Display to Operator with IATA codes such as JL, IJ, and FW.
 ![Operator3](https://github.com/kamadas/dump1090/blob/images/images/fw.png)
 * Changed display of FlightNo. by ZoomLevel.
+* Add Sapporo Area Control Center's S01 to S05 to the map.
+![Sapporo ACC](https://github.com/kamadas/dump1090/blob/images/acc.png)
 
 ## TODO
 
