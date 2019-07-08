@@ -226,3 +226,39 @@ function circles() {
         window.alert('circle error');
     });
 }
+
+function accs() {
+    $.ajax({ url: 'json/sapporo_acc.json',
+             cashe: false,
+             dataType: 'json'})
+    .done(function(data) {
+        $(data).each(function() {
+            var style = [
+                new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: '#1C395B',
+                        width: 3,
+                        lineDash: [4, 4]
+                    })
+                })
+            ];
+
+            var geom = new ol.geom.LineString();
+
+            for (var i = 0; i < this.l.length; ++i) {
+                    var lon = this.l[i].od + ( this.l[i].om * 60 + this.l[i].os ) / 3600;
+                    var lat = this.l[i].ad + ( this.l[i].am * 60 + this.l[i].as ) / 3600;
+                    geom.appendCoordinate([lon, lat]);
+            };
+
+            geom.transform('EPSG:4326', 'EPSG:3857');
+
+            var feature = new ol.Feature(geom);
+            feature.setStyle(style);
+            AccFeatures.push(feature);
+        });
+    })
+    .fail(function() {
+        window.alert('acc error');
+    });
+}

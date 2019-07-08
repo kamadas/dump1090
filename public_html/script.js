@@ -13,6 +13,7 @@ var LowWayFeatures = new ol.Collection();
 var ArrivalFeatures = new ol.Collection();
 var CircleFeatures = new ol.Collection();
 var DepartureFeatures = new ol.Collection();
+var AccFeatures = new ol.Collection();
 var Planes = {};
 var PlanesOrdered = [];
 var SelectedPlane = null;
@@ -213,7 +214,6 @@ var PositionHistorySize = 0;
 function initialize() {
     // Set page basics
     document.title = PageName;
-	$("#infoblock_name").text(PageName);
 
     PlaneRowTemplate = document.getElementById("plane_row_template");
 
@@ -253,7 +253,7 @@ function initialize() {
 
             .done(function (data) {
                 if (typeof data.lat !== "undefined") {
-                    SiteShow = true;
+                    SiteShow = false;
                     SiteLat = data.lat;
                     SiteLon = data.lon;
 //                    DefaultCenterLat = data.lat;
@@ -389,7 +389,7 @@ function end_load_history() {
         console.log("Final history cleanup pass");
         for (var i = 0; i < PlanesOrdered.length; ++i) {
             var plane = PlanesOrdered[i];
-            plane.updateTick(now, last);
+            plane.updateTick(now);
         }
 
         LastReceiverTimestamp = last;
@@ -433,11 +433,7 @@ function make_geodesic_circle(center, radius, points, sd, ed) {
 
         lat2 = lat2 * 180.0 / Math.PI;
         lon2 = lon2 * 180.0 / Math.PI;
-        if(geom === null) {
-            geom = new ol.geom.LineString([lon2, lat2],'XY');
-        } else {
-            geom.appendCoordinate([lon2, lat2]);
-        }
+        geom.appendCoordinate([lon2, lat2]);
     }
     return geom;
 }
@@ -484,6 +480,7 @@ function initialize_map() {
     mapmarkers();
     routes();
     circles();
+    accs();
 
     // Initialize OL3
 
@@ -564,6 +561,14 @@ function initialize_map() {
                 })
             }),
 
+            new ol.layer.Vector({
+                name: 'acc',
+                type: 'overlay',
+                title: 'acc line',
+                source: new ol.source.Vector({
+                    features: AccFeatures,
+                })
+            }),
             iconsLayer
         ]
     }));
@@ -721,6 +726,7 @@ function initialize_map() {
                         popname = popname + '\n' + (Planes[feature.hex].altitude ? alt_text : '?');
                         popname = popname + ' and ' + vsi;
 
+                        popname = popname + '\n' + (Planes[feature.hex].country ? Planes[feature.hex].country : '');
                         popname = popname + ' ' + (Planes[feature.hex].operator ? Planes[feature.hex].operator : '');
                     } else {
                         popname = 'Reg:   ' + (Planes[feature.hex].registration ? Planes[feature.hex].registration : '?');
@@ -1372,7 +1378,7 @@ function selectPlaneByHex(hex, autofollow) {
     if (SelectedPlane !== null) {
         Planes[SelectedPlane].selected = false;
         Planes[SelectedPlane].clearLines();
-        Planes[SelectedPlane].updateMarker(false);
+        Planes[SelectedPlane].updateMarker();
         $(Planes[SelectedPlane].tr).removeClass("selected");
     }
 
@@ -1387,7 +1393,7 @@ function selectPlaneByHex(hex, autofollow) {
         SelectedPlane = hex;
         Planes[SelectedPlane].selected = true;
         Planes[SelectedPlane].updateLines();
-        Planes[SelectedPlane].updateMarker(false);
+        Planes[SelectedPlane].updateMarker();
         $(Planes[SelectedPlane].tr).addClass("selected");
     } else {
         SelectedPlane = null;
@@ -1414,7 +1420,7 @@ function selectAllPlanes() {
         if (SelectedPlane !== null) {
             Planes[SelectedPlane].selected = false;
             Planes[SelectedPlane].clearLines();
-            Planes[SelectedPlane].updateMarker(false);
+            Planes[SelectedPlane].updateMarker();
             $(Planes[SelectedPlane].tr).removeClass("selected");
         }
 
@@ -1425,7 +1431,7 @@ function selectAllPlanes() {
             if (Planes[key].visible && !Planes[key].isFiltered()) {
                 Planes[key].selected = true;
                 Planes[key].updateLines();
-                Planes[key].updateMarker(false);
+                Planes[key].updateMarker();
             }
         }
     }
@@ -1442,12 +1448,12 @@ function selectNewPlanes() {
             if (!Planes[key].visible || Planes[key].isFiltered()) {
                 Planes[key].selected = false;
                 Planes[key].clearLines();
-                Planes[key].updateMarker(false);
+                Planes[key].updateMarker();
             } else {
                 if (Planes[key].selected !== true) {
                     Planes[key].selected = true;
                     Planes[key].updateLines();
-                    Planes[key].updateMarker(false);
+                    Planes[key].updateMarker();
                 }
             }
         }
@@ -1459,7 +1465,7 @@ function deselectAllPlanes() {
     for (var key in Planes) {
         Planes[key].selected = false;
         Planes[key].clearLines();
-        Planes[key].updateMarker(false);
+        Planes[key].updateMarker();
         $(Planes[key].tr).removeClass("selected");
     }
     $('#selectall_checkbox').removeClass('settingsCheckboxChecked');
