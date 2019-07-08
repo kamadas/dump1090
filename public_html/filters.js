@@ -39,7 +39,8 @@ var Filter;
         Species:        'spc',
         Squawk:         'sqk',
         UserInterested: 'int',
-        Wtc:            'wtc'
+        Wtc:            'wtc',
+        EngineType:     'eng'
     };
 
     Filter.FilterType = {
@@ -67,8 +68,12 @@ var Filter;
         Helicopter: 4,
         Gyrocopter: 5,
         Tiltwing: 6,
-        GroundVehicle: 7,
-        Tower: 8
+        Tiltrotor: 7,
+        GroundVehicle: 8,
+        Tower: 9,
+        Drone: 10,
+        Balloon: 11,
+        Paraglider: 12
     };
 
     Filter.WakeTurbulenceCategory = {
@@ -76,6 +81,15 @@ var Filter;
         Light: 1,
         Medium: 2,
         Heavy: 3
+    };
+
+    Filter.EngineType = {
+        None: 0,
+        Piston: 1,
+        Turbo: 2,
+        Jet: 3,
+        Electric: 4,
+        Rocket: 5
     };
 
     Filter.Condition = {
@@ -188,6 +202,7 @@ var Filter;
             this.value1 = s.replace(/[^0-9A-Z]/, "");
         }
     });
+
     Filter.aircraftFilterHandlers[Filter.AircraftFilter.Country] = new Filter.AircraftFilterHandler({
         property: Filter.AircraftFilter.Country,
         type: Filter.FilterType.TextMatch,
@@ -322,7 +337,7 @@ var Filter;
              ],
         isFiltered: function(aircraft){
             if(this.isActive && this.value1 !== undefined){
-                return Filter.filterText(aircraft.icao, this.value1, this.condition); 
+                return Filter.filterText(aircraft.icao, this.value1, this.condition);
             }
             return false;
         },
@@ -350,7 +365,7 @@ var Filter;
              ],
         isFiltered: function(aircraft){
             if(this.isActive && this.value1 !== undefined){
-                return Filter.filterText(aircraft.icaotype, this.value1, this.condition); 
+                return Filter.filterText(aircraft.icaotype, this.value1, this.condition);
             }
             return false;
         },
@@ -460,8 +475,12 @@ var Filter;
                 new Filter.ValueText({ value: Filter.Species.Helicopter, text: 'Helicopter' }),
                 new Filter.ValueText({ value: Filter.Species.Gyrocopter, text: 'Gyrocopter' }),
                 new Filter.ValueText({ value: Filter.Species.Tiltwing, text: 'Tiltwing' }),
+                new Filter.ValueText({ value: Filter.Species.Tiltwing, text: 'Tiltrotor' }),
+                new Filter.ValueText({ value: Filter.Species.Drone, text: 'Drone' }),
+                new Filter.ValueText({ value: Filter.Species.Balloon, text: 'Ballon' }),
+                new Filter.ValueText({ value: Filter.Species.Paraglider, text: 'Paraglider' }),
                 new Filter.ValueText({ value: Filter.Species.GroundVehicle, text: 'Ground Vehicle' }),
-                new Filter.ValueText({ value: Filter.Species.Tower, text: 'Radio Mast' })
+                new Filter.ValueText({ value: Filter.Species.Tower, text: 'Radio Tower' }),
             ],
         isFiltered: function(aircraft){
             if(this.isActive && aircraft.species !== null && this.value1){
@@ -484,7 +503,25 @@ var Filter;
                         if(s === 'G') f = false;
                         break;
                     case Filter.Species.Tiltwing:
+                        if(s === 'W') f = false;
+                        break;
+                    case Filter.Species.Tiltrotor:
+                        if(s === 'R') f = false;
+                        break;
+                    case Filter.Species.GroundVehicle:
+                        if(s === 'V') f = false;
+                        break;
+                    case Filter.Species.Tower:
                         if(s === 'T') f = false;
+                        break;
+                    case Filter.Species.Drone:
+                        if(s === 'D') f = false;
+                        break;
+                    case Filter.Species.Balloon:
+                        if(s === 'B') f = false;
+                        break;
+                    case Filter.Species.Paraglider:
+                        if(s === 'P') f = false;
                         break;
                     default:
                         break;
@@ -498,8 +535,8 @@ var Filter;
             this.value1 = Number(this.value1);
             if(this.value1 < Filter.Species.None)
                 this.value1 = Filter.Species.None;
-            if(this.value1 > Filter.Species.Tower)
-                this.value1 = Filter.Species.Tower;
+            if(this.value1 > Filter.Species.Paraglider)
+                this.value1 = Filter.Species.Paraglider;
         }
     });
 
@@ -571,6 +608,59 @@ var Filter;
                 this.value1 = Filter.WakeTurbulenceCategory.None;
             if(this.value1 > Filter.WakeTurbulenceCategory.Heavy)
                 this.value1 = Filter.WakeTurbulenceCategory.Heavy;
+        }
+    });
+
+    Filter.aircraftFilterHandlers[Filter.AircraftFilter.EngineType] = new Filter.AircraftFilterHandler({
+        property: Filter.AircraftFilter.EngineType,
+        type: Filter.FilterType.EnumMatch,
+        label: 'Engine Type',
+        condition: Filter.Condition.Equals,
+        getFilterConditions: [Filter.Condition.Equals, Filter.Condition.NotEquals],
+        getEnumValues:
+            [
+                new Filter.ValueText({ value: Filter.EngineType.None, text: 'None' }),
+                new Filter.ValueText({ value: Filter.EngineType.Piston, text: 'Piston' }),
+                new Filter.ValueText({ value: Filter.EngineType.Turbo, text: 'Turboshaft' }),
+                new Filter.ValueText({ value: Filter.EngineType.Jet, text: 'Jet' }),
+                new Filter.ValueText({ value: Filter.EngineType.Electric, text: 'Electric' }),
+                new Filter.ValueText({ value: Filter.EngineType.Rocket, text: 'Rocket' })
+            ],
+        isFiltered: function(aircraft){
+            if(this.isActive && aircraft.species !== null && this.value1){
+                var f = true;
+                var s = aircraft.species.substr(2,1);
+                switch(this.value1){
+                    case Filter.EngineType.Piston:
+                        if(s === 'P') f = false;
+                        break;
+                    case Filter.EngineType.Turbo:
+                        if(s === 'T') f = false;
+                        break;
+                    case Filter.EngineType.Jet:
+                        if(s === 'J') f = false;
+                        break;
+                    case Filter.EngineType.Electric:
+                        if(s === 'E') f = false;
+                        break;
+                    case Filter.EngineType.Rocket:
+                        if(s === 'R') f = false;
+                        break;
+                    default:
+                        f = false;
+                        break;
+                }
+                if(this.condition === Filter.Condition.NotEquals) f = !f;
+                return f;
+            }
+            return false;
+        },
+        validate: function(){
+            this.value1 = Number(this.value1);
+            if(this.value1 < Filter.EngineType.None)
+                this.value1 = Filter.EngineType.None;
+            if(this.value1 > Filter.EngineType.Rocket)
+                this.value1 = Filter.EngineType.Rocket;
         }
     });
 

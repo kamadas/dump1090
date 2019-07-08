@@ -389,7 +389,7 @@ function end_load_history() {
         console.log("Final history cleanup pass");
         for (var i = 0; i < PlanesOrdered.length; ++i) {
             var plane = PlanesOrdered[i];
-            plane.updateTick(now);
+            plane.updateTick(now, last);
         }
 
         LastReceiverTimestamp = last;
@@ -721,7 +721,6 @@ function initialize_map() {
                         popname = popname + '\n' + (Planes[feature.hex].altitude ? alt_text : '?');
                         popname = popname + ' and ' + vsi;
 
-                        popname = popname + '\n' + (Planes[feature.hex].country ? Planes[feature.hex].country : '');
                         popname = popname + ' ' + (Planes[feature.hex].operator ? Planes[feature.hex].operator : '');
                     } else {
                         popname = 'Reg:   ' + (Planes[feature.hex].registration ? Planes[feature.hex].registration : '?');
@@ -1373,7 +1372,7 @@ function selectPlaneByHex(hex, autofollow) {
     if (SelectedPlane !== null) {
         Planes[SelectedPlane].selected = false;
         Planes[SelectedPlane].clearLines();
-        Planes[SelectedPlane].updateMarker();
+        Planes[SelectedPlane].updateMarker(false);
         $(Planes[SelectedPlane].tr).removeClass("selected");
     }
 
@@ -1388,7 +1387,7 @@ function selectPlaneByHex(hex, autofollow) {
         SelectedPlane = hex;
         Planes[SelectedPlane].selected = true;
         Planes[SelectedPlane].updateLines();
-        Planes[SelectedPlane].updateMarker();
+        Planes[SelectedPlane].updateMarker(false);
         $(Planes[SelectedPlane].tr).addClass("selected");
     } else {
         SelectedPlane = null;
@@ -1415,7 +1414,7 @@ function selectAllPlanes() {
         if (SelectedPlane !== null) {
             Planes[SelectedPlane].selected = false;
             Planes[SelectedPlane].clearLines();
-            Planes[SelectedPlane].updateMarker();
+            Planes[SelectedPlane].updateMarker(false);
             $(Planes[SelectedPlane].tr).removeClass("selected");
         }
 
@@ -1426,7 +1425,7 @@ function selectAllPlanes() {
             if (Planes[key].visible && !Planes[key].isFiltered()) {
                 Planes[key].selected = true;
                 Planes[key].updateLines();
-                Planes[key].updateMarker();
+                Planes[key].updateMarker(false);
             }
         }
     }
@@ -1443,12 +1442,12 @@ function selectNewPlanes() {
             if (!Planes[key].visible || Planes[key].isFiltered()) {
                 Planes[key].selected = false;
                 Planes[key].clearLines();
-                Planes[key].updateMarker();
+                Planes[key].updateMarker(false);
             } else {
                 if (Planes[key].selected !== true) {
                     Planes[key].selected = true;
                     Planes[key].updateLines();
-                    Planes[key].updateMarker();
+                    Planes[key].updateMarker(false);
                 }
             }
         }
@@ -1460,7 +1459,7 @@ function deselectAllPlanes() {
     for (var key in Planes) {
         Planes[key].selected = false;
         Planes[key].clearLines();
-        Planes[key].updateMarker();
+        Planes[key].updateMarker(false);
         $(Planes[key].tr).removeClass("selected");
     }
     $('#selectall_checkbox').removeClass('settingsCheckboxChecked');

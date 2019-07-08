@@ -4,7 +4,7 @@ Special thanks to everyone involved in the development of this product.
 
 This is a fork of [Mictronics dump1090](https://github.com/Mictronics/dump1090).
 
-## Modifications:
+=======
 
 This is a modification of the dev branch of Mictronics version dump1090 for my own use.
 
