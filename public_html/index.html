@@ -11,7 +11,7 @@
         <script src="jquery/jquery.min.js"></script>
         <script src="jquery/jquery-ui.min.js"></script>
         <script src="jquery/plugins/jquery.validate.min.js"></script>
-        <script src="jquery/jquery.ui.touch-punch.min.js"></script>
+        <script src="jquery/jquery.ui.touch-punch.js"></script>
         <script src="ol3/ol.js" type="text/javascript"></script>
         <script src="ol3/ol3-layerswitcher.js" type="text/javascript"></script>
         <script src="ol3/ol-controls.js" type="text/javascript"></script>
@@ -27,82 +27,11 @@
         <script type="text/javascript" src="jszip.min.js"></script>
         <script type="text/javascript" src="filesaver.min.js"></script>
         <script type="text/javascript" src="script.js"></script>
-        <script type="text/javascript" src="routemap.js"></script>
-        <script>
-            $(function () {
-                $("#accordion").accordion({
-                    collapsible: true,
-                    active: 0,
-                    heightStyle: "content"
-                });
-                $( "#filter_selector" ).selectmenu({
-                    width: 150
-                });
-                $( "#filter_add_button" ).button();
-                $( document ).tooltip({
-                    position: { my: "right center", at: "left center" }
-                });
 
-                var dc = $( "#dialog-confirm" ).dialog({
-                    autoOpen: false,
-                    modal: true,
-                    buttons: {
-                        Ok: function() {
-                            $( this ).dialog( "close" );
-                            $("#edit_icao24").attr("readonly", false);
-                            $("#edit_icao24").focus();
-                        }
-                    }
-                });
-
-                $("#edit_icao24").on( "click", function(){
-                    dc.dialog( "open" );
-                });
-
-                EditAircraftDialog = $( "#editdialog_form" ).dialog({
-                    autoOpen: false,
-                    height: 400,
-                    width: 350,
-                    modal: true,
-                    buttons: {
-                        "Save changes": editAircraftData,
-                        Cancel: function() {
-                            EditAircraftDialog.dialog( "close" );
-                        }
-                    },
-                    close: function() {
-                        form[0].reset();
-                        $("#edit_icao24").attr("readonly", true);
-                    }
-                });
-
-                var form = EditAircraftDialog.find( "form" ).on( "submit", function( event ) {
-                    event.preventDefault();
-                    editAircraftData();
-                });
-
-                $( "#edit-aircraft-button" ).on( "click", function(){
-                    getEditAircraftData();
-                    EditAircraftDialog.dialog( "open" );
-                    $("#edit_reg").focus();
-                });
-
-                $( "#exportDbButton" ).on( "click", function(event) {
-                    event.preventDefault();
-                    Dump1090DB.indexedDB.exportDB();
-                });
-
-                $( "#importDbButton" ).on( "change", function(event) {
-                    event.preventDefault();
-                    Dump1090DB.indexedDB.importDB(event.target.files);
-                    this.value = null;
-                });
-            });
-        </script>
         <title>Mictronics dump1090</title>
     </head>
 
-    <body onload="DatabaseInit()">
+    <body>
         <div id="loader" class="hidden">
             <img src="spinny.gif" id="spinny" alt="Loading...">
             <progress id="loader_progress"></progress>
@@ -133,7 +62,7 @@
         <div id="layout_container">
             <div id="selected_infoblock" class="hidden">
                 <table style="width: 100%">
-                    <tr id="infoblock_head" class="infoblock_heading">
+                    <tr id="infoblock_head" class="infoblock_heading" style="z-index: 100;">
                         <td colspan="2">
                             <b>
                                 <span id="selected_flightid" onclick="toggleFollowSelected();" class="pointer">n/a</span>
@@ -200,7 +129,7 @@
                     <tr class="infoblock_body">
                         <td valign="top" title="The selected heading in the aircraft's flight management system.">Nav heading: <span id="selected_nav_heading"></span></td>
                         <td align="right">
-                            <button id="edit-aircraft-button" class="ui-button ui-widget ui-corner-all ui-button-icon-only">
+                            <button id="edit-aircraft-button" class="ui-button ui-widget ui-corner-all ui-button-icon-only" style="z-index: 100;">
                                 <span class="ui-icon ui-icon-pencil" title="Edit aircraft data"></span>
                             </button>
                         </td>
