@@ -2,7 +2,7 @@ dump1090-fa (3.7.2~dev) UNRELEASED; urgency=medium
 
   * In development
 
- -- Michael Wolf <michael@mictronics.de>  Sun, 14 July 2019 10:43:56 +0200
+ -- Michael Wolf <michael@mictronics.de>  Sun, 14 Jul 2019 10:43:56 +0200
 
 dump1090-fa (3.7.1-ver.Ka) UNRELEASED; urgency=medium
 
@@ -24,7 +24,7 @@ dump1090-fa (3.7.1-ver.Ka) UNRELEASED; urgency=medium
   * Add display flight number near Icon.
   * Cleanup extra spaces.
 
- -- Satoru Kamada <kamada3@google.com>  Mon, 15 July 2019 02:01:00 +0900
+ -- Satoru Kamada <kamada3@google.com>  Mon, 15 Jul 2019 02:01:00 +0900
 
 dump1090-fa (3.7.1) stable; urgency=medium
 
@@ -55,7 +55,7 @@ dump1090-fa (3.7.1) stable; urgency=medium
   * Fix getting LAT/LON from piaware .env file.
   * Add accuracy fields and tooltips for ADSB parameters in info block.
 
- -- Michael Wolf <michael@mictronics.de>  Sun, 14 July 2019 10:29:04 +0200
+ -- Michael Wolf <michael@mictronics.de>  Sun, 14 Jul 2019 10:29:04 +0200
 
 dump1090-fa (3.7.0) stable; urgency=medium
 
