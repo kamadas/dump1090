@@ -253,7 +253,7 @@ function accs() {
                     var lon = this.l[i].od + ( this.l[i].om * 60 + this.l[i].os ) / 3600;
                     var lat = this.l[i].ad + ( this.l[i].am * 60 + this.l[i].as ) / 3600;
                     if ( geom == null) {
-                        geom = new ol.geom.LineString([lat, lon], 'XY');
+                        geom = new ol.geom.LineString([lon, lat], 'XY');
                     } else {
                         geom.appendCoordinate([lon, lat]);
                     }
