@@ -146,7 +146,7 @@ function routes() {
                 })
             ];
 
-            var geom = new ol.geom.LineString();
+            var geom = null;
 
             for (var i = 0; i < this.p.length; ++i) {
 //                var resline = {
@@ -157,7 +157,11 @@ function routes() {
 //                Dump1090DB.indexedDB.getPoint(resline).then( function() {
                     var lon = this.p[i].od + ( this.p[i].om * 60 + this.p[i].os ) / 3600;
                     var lat = this.p[i].ad + ( this.p[i].am * 60 + this.p[i].as ) / 3600;
-                    geom.appendCoordinate([lon, lat]);
+                    if ( geom == null) {
+                        geom = new ol.geom.LineString([lon, lat], 'XY');
+                    } else {
+                        geom.appendCoordinate([lon, lat]);
+                    }
 //                    geom.appendCoordinate([resline.lon, resline.lat]);
 //                });
             };
@@ -243,12 +247,16 @@ function accs() {
                 })
             ];
 
-            var geom = new ol.geom.LineString();
+            var geom = null;
 
             for (var i = 0; i < this.l.length; ++i) {
                     var lon = this.l[i].od + ( this.l[i].om * 60 + this.l[i].os ) / 3600;
                     var lat = this.l[i].ad + ( this.l[i].am * 60 + this.l[i].as ) / 3600;
-                    geom.appendCoordinate([lon, lat]);
+                    if ( geom == null) {
+                        geom = new ol.geom.LineString([lat, lon], 'XY');
+                    } else {
+                        geom.appendCoordinate([lon, lat]);
+                    }
             };
 
             geom.transform('EPSG:4326', 'EPSG:3857');

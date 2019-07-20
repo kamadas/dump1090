@@ -29,7 +29,7 @@ function createBaseLayers() {
     var world = [];
     var us = [];
     var eu = [];
-
+/*
     if (ShowAdditionalMaps && typeof SkyVectorAPIKey !== 'undefined' && SkyVectorAPIKey !== null) {
         var d = svDate();
 
@@ -70,7 +70,7 @@ function createBaseLayers() {
         }));
     }
 
-    if (ShowAdditionalMaps) {
+    if (ShowAdditionalMaps) {*/
         world.push(new ol.layer.Tile({
             source: new ol.source.OSM({
                 "url": "http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
@@ -79,7 +79,7 @@ function createBaseLayers() {
             title: 'OpenStreetMap Light',
             type: 'base',
         }));
-    }
+/*    }
 
     world.push(new ol.layer.Tile({
         source: new ol.source.OSM(),
@@ -212,7 +212,7 @@ function createBaseLayers() {
         refreshDwd();
         window.setInterval(refreshDwd, 5 * 60000);
     }
-
+*/
     if (world.length > 0) {
         layers.push(new ol.layer.Group({
             name: 'world',
@@ -220,7 +220,7 @@ function createBaseLayers() {
             layers: world
         }));
     }
-
+/*
     if (us.length > 0) {
         layers.push(new ol.layer.Group({
             name: 'us',
@@ -236,7 +236,7 @@ function createBaseLayers() {
             layers: eu
         }));
     }
-
+*/
     return layers;
 }
 

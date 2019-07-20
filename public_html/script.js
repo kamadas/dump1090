@@ -290,7 +290,7 @@ function initialize() {
                         MapSettings.ZoomLvl = DefaultZoomLvl;
                         MapSettings.MapType = 'osm';
                         MapSettings.VisibleLayers = {
-                            'layer_site_pos': true,
+                            'layer_site_pos': false,
                             'layer_ac_trail': true,
                             'layer_ac_positions': true,
                             'layer_Rnav_Way': false,
@@ -422,7 +422,7 @@ function make_geodesic_circle(center, radius, points, sd, ed) {
     var angularDistance = radius / 6378137.0;
     var lon1 = center[0] * Math.PI / 180.0;
     var lat1 = center[1] * Math.PI / 180.0;
-    var geom = new ol.geom.LineString();
+    var geom = null;
     for (var i = sd; i <= ed; ++i) {
         var bearing = i * 2 * Math.PI / points;
 
@@ -433,7 +433,11 @@ function make_geodesic_circle(center, radius, points, sd, ed) {
 
         lat2 = lat2 * 180.0 / Math.PI;
         lon2 = lon2 * 180.0 / Math.PI;
-        geom.appendCoordinate([lon2, lat2]);
+        if (geom == null) {
+            geom = new ol.geom.LineString([lon2, lat2], 'XY');
+        } else {
+            geom.appendCoordinate([lon2, lat2]);
+        }
     }
     return geom;
 }
@@ -633,7 +637,7 @@ function initialize_map() {
         }),
         controls: [new ol.control.Zoom(),
             new ol.control.Rotate(),
-            new ol.control.Attribution({collapsed: true}),
+            new ol.control.Attribution({collapsible: true},{collapsed: true}),
             new ol.control.ScaleLine({units: MapSettings.DisplayUnits}),
             new ol.control.LayerSwitcher(),
             new MapControls()
@@ -807,11 +811,15 @@ function initialize_map() {
         });
 
         for (var i = 0; i < data.rings.length; ++i) {
-            var geom = new ol.geom.LineString();
+            var geom = null;
             var points = data.rings[i].points;
             if (points.length > 0) {
                 for (var j = 0; j < points.length; ++j) {
-                    geom.appendCoordinate([points[j][1], points[j][0]]);
+                    if ( geom == null) {
+                        geom = new ol.geom.LineString([points[j][1], points[j][0]], 'XY');
+                    } else {
+                        geom.appendCoordinate([points[j][1], points[j][0]]);
+                    }
                 }
                 geom.appendCoordinate([points[0][1], points[0][0]]);
                 geom.transform('EPSG:4326', 'EPSG:3857');
