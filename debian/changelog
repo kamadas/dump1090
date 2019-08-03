@@ -1,3 +1,10 @@
+dump1090-fa (3.7.2) stable; urgency=medium
+
+  * Added configurable re-connection delay for push server support.
+  * Add bladeRF v2.0 Micro support (credits @kazazes)
+
+ -- Michael Wolf <michael@mictronics.de>  Fri, 26 July 2019 18:47:32 +0200
+
 dump1090-fa (3.7.1) stable; urgency=medium
 
   * Update aircraft database.
