@@ -205,21 +205,37 @@ function circles() {
                 circlegeom.transform('EPSG:4326', 'EPSG:3857');
                 var circlefeature = new ol.Feature(circlegeom);
 
-                if ( this.a === "arc" )
-                    var colour = '#b8860b'
-                else
-                    var colour = '#a0a0a0'
-
-                var circlestyle = new ol.style.Style({
-                    fill: null,
-                    stroke: new ol.style.Stroke({
-                        width: 1,
-                        color: colour
-                    })
-                });
+                if ( this.a === "acc" ) {
+                    var circlestyle = new ol.style.Style({
+                        fill: null,
+                        stroke: new ol.style.Stroke({
+                            width: 3,
+                            color: '#1C395B',
+                            lineDash: [4, 4]
+                        })
+                    });
+                } else if ( this.a === "arc" ) {
+                    var circlestyle = new ol.style.Style({
+                        fill: null,
+                        stroke: new ol.style.Stroke({
+                            width: 1,
+                            color: '#b8860b'
+                        })
+                    });
+                } else {
+                    var circlestyle = new ol.style.Style({
+                        fill: null,
+                        stroke: new ol.style.Stroke({
+                            width: 1,
+                            color: '#a0a0a0'
+                        })
+                    });
+                }
                 circlefeature.setStyle(circlestyle);
 
-                if ( this.a === "arc" )
+                if ( this.a === "acc" )
+                    AccFeatures.push(circlefeature);
+                else if ( this.a === "arc" )
                     ArrivalFeatures.push(circlefeature);
                 else
                     CircleFeatures.push(circlefeature);
