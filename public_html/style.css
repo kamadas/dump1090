@@ -39,7 +39,7 @@ html, body {
 
 #sidebar_container {
     display: flex;
-    width: 490px;
+    width: 310px;
     left: 0 !important;
 }
 

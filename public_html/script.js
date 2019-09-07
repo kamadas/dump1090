@@ -1541,7 +1541,7 @@ function showMap() {
     $("#toggle_sidebar_control").show();
     $("#splitter").show();
     $("#show_map_button").hide();
-    $("#sidebar_container").width("500px");
+    $("#sidebar_container").width("310px");
     $("#accordion").accordion("option", "active", false);
     setColumnVisibility();
     setSelectedInfoBlockVisibility();
@@ -1565,8 +1565,11 @@ function setColumnVisibility() {
     var infoTable = $("#tableinfo");
 
     showColumn(infoTable, "#registration", !mapIsVisible);
+    showColumn(infoTable, "#civil_mil", !mapIsVisible);
+    showColumn(infoTable, "#squawk", !mapIsVisible);
     showColumn(infoTable, "#aircraft_type", !mapIsVisible);
     showColumn(infoTable, "#vert_rate", !mapIsVisible);
+    showColumn(infoTable, "#msgs", !mapIsVisible);
     showColumn(infoTable, "#rssi", !mapIsVisible);
     showColumn(infoTable, "#lat", !mapIsVisible);
     showColumn(infoTable, "#lon", !mapIsVisible);

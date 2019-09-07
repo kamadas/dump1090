@@ -152,21 +152,21 @@
                         <div id="dump1090_infoblock">
                             <table style="width: 100%">
                                 <tr class="infoblock_heading">
-                                    <td>
+                                    <!--<td>
                                         <b id="infoblock_name">Mictronics dump1090</b>
                                     </td>
-                                    <td></td>
+                                    <td>--></td>
                                     <td style="text-align: right">
-                                        <a href="https://github.com/Mictronics/dump1090" id="dump1090_version" target="_blank"></a>
+                                        <a href="https://github.com/kamadas/dump1090" id="dump1090_version" target="_blank"></a>
                                     </td>
                                 </tr>
                                 <tr class="infoblock_body">
-                                    <td>Aircraft (total/unknown): <span id="dump1090_total_ac">n/a</span></td>
-                                    <td>Messages: <span id="dump1090_message_rate">n/a</span>/sec</td>
+                                    <td>Aircraft (t/u): <span id="dump1090_total_ac">n/a</span></td>
+                                    <td>Msgs: <span id="dump1090_message_rate">n/a</span>/sec</td>
                                 </tr>
                                 <tr class="infoblock_body">
-                                    <td>(with positions): <span id="dump1090_total_ac_positions">n/a</span></td>
-                                    <td>History: <span id="dump1090_total_history">n/a</span> positions</td>
+                                    <td>(with pos.): <span id="dump1090_total_ac_positions">n/a</span></td>
+                                    <td>History: <span id="dump1090_total_history">n/a</span> pos.</td>
                                     <td style="text-align: right"><button id="show_map_button" class="ui-button ui-widget ui-corner-all" title="Show Map"><span class="ui-icon ui-icon-arrowthickstop-1-e"></span></button></td>
                                 </tr>
                             </table>
@@ -214,20 +214,20 @@
                                     <td id="icao" onclick="sortByICAO();">ICAO</td>
                                     <td id="flag" onclick="sortByCountry()"><!-- column for flag image --></td>
                                     <td id="flight" onclick="sortByFlight();">Ident</td>
-                                    <td id="registration" onclick="sortByRegistration();">Registration</td>
-                                    <td id="civil_mil" onclick="sortByCivilMil();">Civ/Mil</td>
-                                    <td id="aircraft_type" onclick="sortByAircraftType();"> Aircraft type</td>
-                                    <td id="squawk" onclick="sortBySquawk();">Squawk</td>
-                                    <td id="altitude" onclick="sortByAltitude();">Altitude (<span class="altitudeUnit"></span>)</td>
-                                    <td id="speed" onclick="sortBySpeed();">Speed (<span class="speedUnit"></span>)</td>
-                                    <td id="vert_rate" onclick="sortByVerticalRate();">Vertical Rate (<span class="verticalRateUnit"></span>)</td>
-                                    <td id="distance" onclick="sortByDistance();">Distance (<span class="distanceUnit"></span>)</td>
+                                    <td id="registration" onclick="sortByRegistration();">Reg</td>
+                                    <td id="civil_mil" onclick="sortByCivilMil();">C/M</td>
+                                    <td id="aircraft_type" onclick="sortByAircraftType();">Type</td>
+                                    <td id="squawk" onclick="sortBySquawk();">Sqk</td>
+                                    <td id="altitude" onclick="sortByAltitude();">Alt (<span class="altitudeUnit"></span>)</td>
+                                    <td id="speed" onclick="sortBySpeed();">Spd</td>
+                                    <td id="vert_rate" onclick="sortByVerticalRate();">V Rate</td>
+                                    <td id="distance" onclick="sortByDistance();">Dist (<span class="distanceUnit"></span>)</td>
                                     <td id="track" onclick="sortByTrack();">Track</td>
                                     <td id="msgs" onclick="sortByMsgs();">Msgs</td>
                                     <td id="seen" onclick="sortBySeen();">Age</td>
                                     <td id="rssi" onclick="sortByRssi();">RSSI</td>
-                                    <td id="lat" onclick="sortByLatitude();">Latitude</td>
-                                    <td id="lon" onclick="sortByLongitude();">Longitude</td>
+                                    <td id="lat" onclick="sortByLatitude();">Lat</td>
+                                    <td id="lon" onclick="sortByLongitude();">Lon</td>
                                     <td id="data_source" onclick="sortByDataSource();">Data Source</td>
                                 </tr>
                             </thead>
@@ -237,13 +237,13 @@
                                     <td><img style="width: 20px; height: 12px" src="about:blank" alt="Flag"></td>
                                     <td>FLIGHT</td>
                                     <td>REGISTRATION</td>
-                                    <td style="text-align: center">CIVIL_MIL</td>
+                                    <td style="text-align: center">C_M</td>
                                     <td>AIRCRAFT_TYPE</td>
-                                    <td style="text-align: right">SQUAWK</td>
-                                    <td style="text-align: right">ALTITUDE</td>
-                                    <td style="text-align: right">SPEED</td>
-                                    <td style="text-align: right">VERT_RATE</td>
-                                    <td style="text-align: right">DISTANCE</td>
+                                    <td style="text-align: right">SQK</td>
+                                    <td style="text-align: right">ALT</td>
+                                    <td style="text-align: right">SPD</td>
+                                    <td style="text-align: right">V_RATE</td>
+                                    <td style="text-align: right">DIST</td>
                                     <td style="text-align: right">TRACK</td>
                                     <td style="text-align: right">MSGS</td>
                                     <td style="text-align: right">SEEN</td>
