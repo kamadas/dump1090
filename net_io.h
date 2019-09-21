@@ -1,13 +1,17 @@
-// Part of dump1090, a Mode S message decoder for RTLSDR devices.
+// Part of readsb, a Mode-S/ADSB/TIS message decoder.
 //
 // net_io.h: network handling.
 //
+// Copyright (c) 2019 Michael Wolf <michael@mictronics.de>
+//
+// This code is based on a detached fork of dump1090-fa.
+//
 // Copyright (c) 2014,2015 Oliver Jowett <oliver@mutability.co.uk>
 //
-// This file is free software: you may copy, redistribute and/or modify it
-// under the terms of the GNU General Public License as published by the
-// Free Software Foundation, either version 2 of the License, or (at your
-// option) any later version.
+// This file is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// any later version.
 //
 // This file is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,8 +21,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef DUMP1090_NETIO_H
-#define DUMP1090_NETIO_H
+#ifndef NETIO_H
+#define NETIO_H
 
 // Describes a networking service (group of connections)
 
@@ -52,6 +56,7 @@ struct net_service
   int listener_count; // number of listeners
   int pusher_count; // Number of push servers connected to
   int connections; // number of active clients
+  int serial_service; // 1 if this is a service for serial devices
   read_mode_t read_mode;
   read_fn read_handler;
   struct net_writer *writer; // shared writer state
@@ -93,7 +98,7 @@ void serviceListen (struct net_service *service, char *bind_addr, char *bind_por
 struct client *createSocketClient (struct net_service *service, int fd);
 struct client *createGenericClient (struct net_service *service, int fd);
 
-// view1090 / faup1090 want to create these themselves:
+// viewadsb want to create these itselves
 struct net_service *makeBeastInputService (void);
 struct net_service *makeFatsvOutputService (void);
 
@@ -102,6 +107,7 @@ void sendBeastSettings (struct client *c, const char *settings);
 void modesInitNet (void);
 void modesQueueOutput (struct modesMessage *mm, struct aircraft *a);
 void modesNetPeriodicWork (void);
+void modesReadSerialClient(void);
 
 // TODO: move these somewhere else
 char *generateAircraftJson (const char *url_path, int *len);

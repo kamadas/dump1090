@@ -1,13 +1,17 @@
-// Part of dump1090, a Mode S message decoder for RTLSDR devices.
+// Part of readsb, a Mode-S/ADSB/TIS message decoder.
 //
 // net_io.c: network handling.
 //
+// Copyright (c) 2019 Michael Wolf <michael@mictronics.de>
+//
+// This code is based on a detached fork of dump1090-fa.
+//
 // Copyright (c) 2014-2016 Oliver Jowett <oliver@mutability.co.uk>
 //
-// This file is free software: you may copy, redistribute and/or modify it
-// under the terms of the GNU General Public License as published by the
-// Free Software Foundation, either version 2 of the License, or (at your
-// option) any later version.
+// This file is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// any later version.
 //
 // This file is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,38 +20,38 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+//
 // This file incorporates work covered by the following copyright and
-// permission notice:
+// license:
 //
-//   Copyright (C) 2012 by Salvatore Sanfilippo <antirez@gmail.com>
+// Copyright (C) 2012 by Salvatore Sanfilippo <antirez@gmail.com>
 //
-//   All rights reserved.
+// All rights reserved.
 //
-//   Redistribution and use in source and binary forms, with or without
-//   modification, are permitted provided that the following conditions are
-//   met:
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
 //
-//    *  Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
+//  *  Redistributions of source code must retain the above copyright
+//     notice, this list of conditions and the following disclaimer.
 //
-//    *  Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
+//  *  Redistributions in binary form must reproduce the above copyright
+//     notice, this list of conditions and the following disclaimer in the
+//     documentation and/or other materials provided with the distribution.
 //
-//   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-//   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-//   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-//   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-//   HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-//   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-//   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-//   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-//   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-//   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "dump1090.h"
+#include "readsb.h"
 
 /* for PRIX64 */
 #include <inttypes.h>
@@ -304,6 +308,12 @@ void modesInitNet(void) {
     /* Beast input from local Modes-S Beast via USB */
     if (Modes.sdr_type == SDR_MODESBEAST) {
         s = makeBeastInputService();
+        createGenericClient(s, Modes.beast_fd);
+    }
+    else if (Modes.sdr_type == SDR_GNS) {
+        /* Hex input from local GNS5894 via USART0 */
+        s = serviceInit("Hex GNSHAT input", NULL, NULL, READ_MODE_ASCII, "\n", decodeHexMessage);
+        s->serial_service = 1;
         createGenericClient(s, Modes.beast_fd);
     }
 
@@ -1737,7 +1747,7 @@ char *generateReceiverJson(const char *url_path, int *len) {
                  "\"version\" : \"%s\", "
             "\"refresh\" : %.0f, "
             "\"history\" : %d",
-            MODES_DUMP1090_VERSION, 1.0 * Modes.json_interval, history_size);
+            MODES_READSB_VERSION, 1.0 * Modes.json_interval, history_size);
 
     if (Modes.json_location_accuracy && (Modes.fUserLat != 0.0 || Modes.fUserLon != 0.0)) {
         if (Modes.json_location_accuracy == 1) {
@@ -1854,6 +1864,7 @@ static void modesReadFromClient(struct client *c) {
         }
 #ifndef _WIN32
         nread = read(c->fd, c->buf + c->buflen, left);
+        int err = errno;
 #else
         nread = recv(c->fd, c->buf + c->buflen, left, 0);
         if (nread < 0) {
@@ -1872,7 +1883,7 @@ static void modesReadFromClient(struct client *c) {
         }
 
 #ifndef _WIN32
-        if (nread < 0 && (errno == EAGAIN || errno == EWOULDBLOCK)) // No data available (not really an error)
+        if (nread < 0 && (err == EAGAIN || err == EWOULDBLOCK)) // No data available (not really an error)
 #else
         if (nread < 0 && errno == EWOULDBLOCK) // No data available (not really an error)
 #endif
@@ -1891,8 +1902,8 @@ static void modesReadFromClient(struct client *c) {
         char *eod = som + c->buflen; // one byte past end of data
         char *p;
         int remote = 1; // Messages will be marked remote by default
-        if ((c->fd == Modes.beast_fd) && (Modes.sdr_type == SDR_MODESBEAST)) {
-            /* Message from a local connected Modes-S beast are passed off the internet */
+        if ((c->fd == Modes.beast_fd) && (Modes.sdr_type == SDR_MODESBEAST || Modes.sdr_type == SDR_GNS)) {
+            /* Message from a local connected Modes-S beast or GNS5894 are passed off the internet */
             remote = 0;
         }
 
@@ -2512,6 +2523,27 @@ void modesNetPeriodicWork(void) {
             prev = &c->next;
         }
     }
+}
+
+/**
+ * Reads data from serial client (GNS5894) via SignalIO trigger and
+ * writes output. Speed up data handling since we have no influence on
+ * flow control in that case.
+ * Other periodic work is still done in function above and triggered from
+ * backgroundTasks().
+ */
+void modesReadSerialClient(void) {
+    struct client *c;
+
+    // Search and read from marked serial client only
+    for (c = Modes.clients; c; c = c->next) {
+        if (!c->service)
+            continue;
+        if (c->service->read_handler && c->service->serial_service)
+            modesReadFromClient(c);
+    }
+    // Generate FATSV output
+    writeFATSV();
 }
 
 //
