@@ -7,7 +7,8 @@ This is a fork of [Mictronics Readsb](https://github.com/Mictronics/readsb).
 =======
 
 This is a modification of the dev branch of Mictronics version readsb for my own use.
-*Work test/markers_test
+
+* Work test/markers_test
 ![markers_test](https://github.com/kamadas/dump1090/blob/images/test.png)
 
 * Display the flight number next to the icon.
@@ -17,7 +18,7 @@ This is a modification of the dev branch of Mictronics version readsb for my own
 ![All_Rnav_and_VOR-way](https://github.com/kamadas/dump1090/blob/images/All_Rnav_and_Low-way.png)
 
 * Display airport arrival routes and departure routes. (Data has been input only in Hokkaido)
-![Arrival](https://github.com/kamadas/dump1090/blob/images/images/Arr.png)
+![Arrival](https://github.com/kamadas/dump1090/blob/images/Arr.png)
 ![Deperture](https://github.com/kamadas/dump1090/blob/images/Dep.png)
 
 * The display items are limited for Raspberry Pi official 7 inch LCD.
