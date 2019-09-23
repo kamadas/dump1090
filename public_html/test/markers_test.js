@@ -1,3 +1,4 @@
+//"use strict";
 import {
   TypeDesignatorIcons,
   TypeDescriptionIcons,
@@ -19,7 +20,7 @@ function SetupMarkersTest() {
     source: new ol.source.Vector(),
   });
 
-  const Map = new ol.Map({
+  let Map = new ol.Map({
     target: 'map_canvas',
     layers: [ MarkerLayer ],
     view: new ol.View({
@@ -47,30 +48,31 @@ function SetupMarkersTest() {
     AddMarker(type, Marker);
   }
 
-  Marker = GetBaseMarker(null, null, null, null);
-  AddMarker("Default", Marker);
-
   for (let category in CategoryIcons) {
     Marker = GetBaseMarker(category, null, null, null);
     AddMarker("Cat " + category, Marker);
   }
 
+  Marker = GetBaseMarker(null, null, null, null);
+  AddMarker("Default", Marker);
+
   Map.getView().setCenter(ol.proj.fromLonLat([5, NextLat/2]));
 }
 
 function AddMarker(title, baseMarker) {
-  const icon = new ol.style.Icon({
+  let icon = new ol.style.Icon({
     anchor: [0.5, 0.5],
     anchorXUnits: 'pixels',
     anchorYUnits: 'pixels',
     scale: 1.2,
+//                imgSize: baseMarker.size,
     src: SvgPathToUri(baseMarker.svg, '#000000', '#00C000', 'stroke="#00C000" stroke-width="1px"'),
     rotation: 0,
     opacity: 1.0,
     rotateWithView: (baseMarker.noRotate ? false : true)
   });
 
-  const markerStyle = new ol.style.Style({
+  let markerStyle = new ol.style.Style({
     image: icon,
     text: new ol.style.Text({
       textAlign: 'center',
@@ -81,7 +83,7 @@ function AddMarker(title, baseMarker) {
     })
   });
 
-  const pos = [NextLon, NextLat];
+  let pos = [NextLon, NextLat];
   let marker = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat(pos)));
   marker.setStyle(markerStyle);
   MarkerLayer.getSource().addFeature(marker);
