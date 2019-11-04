@@ -30,7 +30,7 @@ import { GetAircraftData, GetOperator } from './database.js';
 import * as Filter from './filters.js';
 import FindIcaoRange from './flags.js';
 import './formatter.js';
-import { GetBaseMarker, SvgPathToUri } from './markers.js';
+import { GetBaseMarker, SvgPathToUri, Shapes } from './markers.js';
 import './ol3/ol.js';
 import RegistrationFromHexId from './registrations.js';
 import {
@@ -122,6 +122,9 @@ export default class Plane {
     this.markerStaticIcon = null;
     this.markerStyleKey = null;
     this.markerSvgKey = null;
+    this.scale = 1;				// Ver Ka. start
+    this.markerScale = 1;
+    this.markerShape = null;			// Ver Ka. end
 
     // start from a computed registration, let the DB override it
     // if it has something else.
@@ -434,9 +437,16 @@ export default class Plane {
   }
 
   UpdateIcon() {
+    const markerScaleFactor = 1.2;
+    const markerMinSize     = 0.72;
+    const markerMaxSize     = 1.32;
     const scaleFactor = Math.max(
-      0.2,
-      Math.min(1.2, 0.15 * 1.25 ** MapSettings.ZoomLvl),
+      markerMinSize,			//0.2,
+      Math.min(markerMaxSize,		//1.2,
+               markerScaleFactor *	//0.15 *
+               0.08 * 			//1.25 **
+               1.0 ** MapSettings.ZoomLvl
+      )
     ).toFixed(1);
 
     const col = this.GetMarkerColor();
@@ -453,6 +463,14 @@ export default class Plane {
       this.species,
       this.wtc,
     );
+
+// Ver Ka. start
+    this.markerShape = baseMarker[0];
+    this.markerScale = baseMarker[1];
+    this.baseMarker = Shapes[this.markerShape];
+    this.scale = this.markerScale * scaleFactor;
+// Ver Ka. end
+
     let rotation = this.track;
     if (rotation === null) {
       rotation = this.true_heading;
@@ -475,7 +493,8 @@ export default class Plane {
 						//ver Ka end
     // var transparentBorderWidth = (32 / baseMarker.scale / scaleFactor).toFixed(1);
 
-    const svgKey = `${col}!${outline}!${baseMarker.svg}!${addStroke}!${scaleFactor}`;
+//    const svgKey = `${col}!${outline}!${baseMarker.svg}!${addStroke}!${scaleFactor}`;
+    const svgKey = `${col}!${outline}!${baseMarker.svg}!${addStroke}`;
     const styleKey = `${opacity}!${rotation}`;
 
     if (
@@ -489,12 +508,13 @@ export default class Plane {
         anchor: [0.5, 0.5],
         anchorXUnits: 'fraction',
         anchorYUnits: 'fraction',
-        scale: 1.2 * scaleFactor,
-        imgSize: baseMarker.size,
-        src: SvgPathToUri(baseMarker.svg, outline, col, addStroke),
-        rotation: baseMarker.noRotate ? 0 : (rotation * Math.PI) / 180.0,
+//        scale: 1.2 * scaleFactor,
+        scale: this.scale,				// Ver Ka. start
+        imgSize: this.baseMarker.size,
+        src: SvgPathToUri(this.baseMarker.svg, outline, col, addStroke),
+        rotation: this.baseMarker.noRotate ? 0 : (rotation * Math.PI) / 180.0,
         opacity,
-        rotateWithView: !baseMarker.noRotate,
+        rotateWithView: !this.baseMarker.noRotate,	// Ver Ka. end
       });
 
       this.markerIcon = icon;
