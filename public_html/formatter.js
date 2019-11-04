@@ -22,8 +22,8 @@
 
 const Nbsp = '\u00a0';
 const Degrees = '\u00b0';
-const UpTriangle = '\u25b2'; // U+25B2 BLACK UP-POINTING TRIANGLE
-const DownTriangle = '\u25bc'; // U+25BC BLACK DOWN-POINTING TRIANGLE
+export const UpTriangle = '\u25b2'; // U+25B2 BLACK UP-POINTING TRIANGLE
+export const DownTriangle = '\u25bc'; // U+25BC BLACK DOWN-POINTING TRIANGLE
 
 const TrackDirections = [
   'North',

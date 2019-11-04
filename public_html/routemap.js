@@ -27,10 +27,11 @@ import {
   CircleFeatures,
   DepartureFeatures,
   AccsFeatures,
+  DirectFeatures,
   MakeGeodesicCircle,
 } from './script.js';
 
-export function mapmarkers() {
+export function points() {
   $.ajax({
     url: 'json/points.json',
     cache: false,
@@ -43,6 +44,9 @@ export function mapmarkers() {
         const name = this.name;
         let color = '#000000';
 
+        if ( this.v === 1 ) {
+          color = '#000000';
+        }
         if ( this.d === 1 ) {
           color = '#c03181';
         }
@@ -94,6 +98,9 @@ export function mapmarkers() {
           }
           if ( this.l === 1 ) {
             VORWayFeatures.push(feature);
+          }
+          if ( this.v === 1 ) {
+            DirectFeatures.push(feature);
           }
         });
     })
@@ -163,8 +170,11 @@ export function routes() {
         if ( this.a === 'rnv' ) {
           RnavWayFeatures.push(feature);
         }
-        if ( this.a === 'low' || this.a === 'dir' ) {
+        if ( this.a === 'low' ) {
           VORWayFeatures.push(feature);
+        }
+        if ( this.a === 'dir' ) {
+          DirectFeatures.push(feature);
         }
       });
     })

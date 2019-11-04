@@ -38,6 +38,7 @@ import {
   SiteLat,
   SiteLon,
   SiteShow,
+  JP,							// Ver Ka.
 } from './config.js';
 import {
   DatabaseInit,
@@ -71,19 +72,21 @@ import {
   FormatVerticalRateBrief,
   FormatVerticalRateLong,
   GetUnitLabel,
+  UpTriangle,					// Ver Ka.
+  DownTriangle,					// Ver Ka.
 } from './formatter.js';
 import CreateBaseLayers from './layers.js';
 import Plane from './plane.js';
 import './ol3/ol.js';
 import MapControls from './ol3/ol-controls.js';
 import './ol3/ol3-layerswitcher.js';
-							//ver Ka start
+						// Ver Ka. start
 import {
-  mapmarkers,
+  points,
   routes,
   circles,
   accs,
-} from './routemap.js';					//ver Ka end
+} from './routemap.js';				// Ver Ka. end
 
 // Define our global variables
 let EditAircraftDialog = null;
@@ -101,14 +104,15 @@ export const SelectedAllPlanes = () => selectedAllPlanes;
 let FollowSelected = false;
 const infoBoxOriginalPosition = {};
 let customAltitudeColors = true;
-							//ver Ka start
-export const RnavWayFeatures = new ol.Collection();
-export const VORWayFeatures = new ol.Collection();
-export const ArrivalFeatures = new ol.Collection();
-export const CircleFeatures = new ol.Collection();
-export const DepartureFeatures = new ol.Collection();
-export const AccsFeatures = new ol.Collection();
-							//Ver-Ka end
+							// Ver Ka start
+  export const RnavWayFeatures = new ol.Collection();
+  export const VORWayFeatures = new ol.Collection();
+  export const ArrivalFeatures = new ol.Collection();
+  export const CircleFeatures = new ol.Collection();
+  export const DepartureFeatures = new ol.Collection();
+  export const AccsFeatures = new ol.Collection();
+  export const DirectFeatures = new ol.Collection();
+							// Ver-Ka end
 // Set the name of the hidden property and the change event for visibility
 let hidden;
 if (typeof document.hidden !== 'undefined') {
@@ -135,62 +139,7 @@ export const SpecialSquawks = {
     cssClass: 'squawk7700',
     markerColor: 'rgb(255, 255, 0)',
     text: 'General Emergency',
-  },/*
-  '0020': {
-    cssClass: 'squawkSpecialDE',
-    markerColor: 'rgb(227, 200, 0)',
-    text: 'Rettungshubschrauber',
   },
-  '0023': {
-    cssClass: 'squawkSpecialDE',
-    markerColor: 'rgb(0, 80, 239)',
-    text: 'Bundespolizei',
-  },
-  '0025': {
-    cssClass: 'squawkSpecialDE',
-    markerColor: 'rgb(243, 156, 18)',
-    text: 'Absetzluftfahrzeug',
-  },
-  '0027': {
-    cssClass: 'squawkSpecialDE',
-    markerColor: 'rgb(243, 156, 18)',
-    text: 'Kunstflug',
-  },
-  '0030': {
-    cssClass: 'squawkSpecialDE',
-    markerColor: 'rgb(243, 156, 18)',
-    text: 'Vermessung',
-  },
-  '0031': {
-    cssClass: 'squawkSpecialDE',
-    markerColor: 'rgb(243, 156, 18)',
-    text: 'Open Skies',
-  },
-  '0033': {
-    cssClass: 'squawkSpecialDE',
-    markerColor: 'rgb(0, 138, 0)',
-    text: 'VFR Militär 550ftAGL <FL100',
-  },
-  '0034': {
-    cssClass: 'squawkSpecialDE',
-    markerColor: 'rgb(243, 156, 18)',
-    text: 'SAR Einsatz',
-  },
-  '0036': {
-    cssClass: 'squawkSpecialDE',
-    markerColor: 'rgb(0, 80, 239)',
-    text: 'Polizei Einsatz',
-  },
-  '0037': {
-    cssClass: 'squawkSpecialDE',
-    markerColor: 'rgb(0, 80, 239)',
-    text: 'Polizei BIV',
-  },
-  1600: {
-    cssClass: 'squawkSpecialDE',
-    markerColor: 'rgb(0, 138, 0)',
-    text: 'Militär Tieflug <500ft',
-  },*/
 };
 
 let ReadsbVersion = 'unknown version';
@@ -221,17 +170,8 @@ export const MapSettings = {
     layer_site_pos: true,
     layer_ac_trail: true,
     layer_ac_positions: true,
-						//ver Ka start
-    layer_Rnav_Way: false,
-    layer_VOR_Way: false,
-    layer_circles: true,
-    layer_arrival: false,
-    layer_departure: false,
-    layer_accs: true,
-						//ver Ka end
   },
   DisplayUnits: DefaultDisplayUnits,
-/*  AltitudeChart: true,*/			//Original version
   AltitudeChart: false,				//ver Ka
 };
 
@@ -299,7 +239,6 @@ function ShowMap() {
   $('#toggle_sidebar_control').show();
   $('#splitter').show();
   $('#show_map_button').hide();
-/*  $('#sidebar_container').width('500px');*/		//Original version
   $('#sidebar_container').width('310px');		//ver Ka
   $('#accordion').accordion('option', 'active', false);
   SetColumnVisibility();
@@ -633,61 +572,6 @@ export function RefreshSelected() {
   } else {
     $('#selected_adsb_version').text(`v${selected.version}`);
   }
-
-  // Wind speed and direction
-  if (
-    selected.gs !== null
-    && selected.tas !== null
-    && selected.track !== null
-    && selected.mag_heading !== null
-  ) {
-    selected.track = (selected.track || 0) * 1 || 0;
-    selected.mag_heading = (selected.mag_heading || 0) * 1 || 0;
-    selected.tas = (selected.tas || 0) * 1 || 0;
-    selected.gs = (selected.gs || 0) * 1 || 0;
-    const trk = (Math.PI / 180) * selected.track;
-    const hdg = (Math.PI / 180) * selected.mag_heading;
-    const ws = Math.round(
-      Math.sqrt(
-        Math.pow(selected.tas - selected.gs, 2)
-          + 4
-            * selected.tas
-            * selected.gs
-            * Math.pow(Math.sin((hdg - trk) / 2), 2),
-      ),
-    );
-    let wd = trk
-      + Math.atan2(
-        selected.tas * Math.sin(hdg - trk),
-        selected.tas * Math.cos(hdg - trk) - selected.gs,
-      );
-    if (wd < 0) {
-      wd += 2 * Math.PI;
-    }
-    if (wd > 2 * Math.PI) {
-      wd -= 2 * Math.PI;
-    }
-    wd = Math.round((180 / Math.PI) * wd);
-    $('#selected_wind_speed').text(
-      FormatSpeedLong(ws, MapSettings.DisplayUnits),
-    );
-    $('#selected_wind_direction').text(FormatTrackLong(wd));
-
-    $('#wind_arrow').show();
-    const C = Math.PI / 180;
-    const arrowx1 = 20 - 12 * Math.sin(C * wd);
-    const arrowx2 = 20 + 12 * Math.sin(C * wd);
-    const arrowy1 = 20 + 12 * Math.cos(C * wd);
-    const arrowy2 = 20 - 12 * Math.cos(C * wd);
-    $('#wind_arrow').attr('x1', arrowx1);
-    $('#wind_arrow').attr('x2', arrowx2);
-    $('#wind_arrow').attr('y1', arrowy1);
-    $('#wind_arrow').attr('y2', arrowy2);
-  } else {
-    $('#wind_arrow').hide();
-    $('#selected_wind_speed').text('n/a');
-    $('#selected_wind_direction').text('n/a');
-  }
 }
 
 // deselect all the planes
@@ -982,7 +866,6 @@ export function MakeGeodesicCircle(center, radius, points, sd, ed) {	//vew Ka
   const lon1 = (center[0] * Math.PI) / 180.0;
   const lat1 = (center[1] * Math.PI) / 180.0;
   let geom = null;
-//  for (let i = 0; i <= points; i += 1) {		//Original version
   for (let i = sd; i <= ed; i += 1) {			//ver Ka
     const bearing = (i * 2 * Math.PI) / points;
 
@@ -1157,12 +1040,6 @@ function CreateSiteCircleFeatures() {
       color: '#000000',
       width: 1,
     }),
-/*    text: new ol.style.Text({
-      font: '10px Helvetica Neue, sans-serif',
-      fill: new ol.style.Fill({ color: '#000' }),
-      offsetY: -8,
-      text: FormatDistanceLong(distance, MapSettings.DisplayUnits, 0),
-    }),*/						//Original version
   });
 
   let conversionFactor = 1000.0;
@@ -1174,8 +1051,7 @@ function CreateSiteCircleFeatures() {
 
   for (let i = 0; i < SiteCirclesDistances.length; i += 1) {
     const distance = SiteCirclesDistances[i] * conversionFactor;
-//    const circle = MakeGeodesicCircle(sitePosition, distance, 360);		//Original ver
-    const circle = MakeGeodesicCircle(sitePosition, distance, 360, 0, 360);	//ver Ka
+    const circle = MakeGeodesicCircle(sitePosition, distance, 360, 0, 360);	//Ver Ka.
     circle.transform('EPSG:4326', 'EPSG:3857');
     const feature = new ol.Feature(circle);
     feature.setStyle(circleStyle(distance));
@@ -1230,12 +1106,13 @@ function InitializeMap() {
   });
   $('#alt_chart_checkbox').trigger('change');
 
-						//ver Ka start
-  mapmarkers();
-  routes();
-  circles();
-  accs();
-						//ver Ka end
+  if ( JP === true ) {				// Ver Ka. start
+    points();
+    routes();
+    circles();
+    accs();
+  }						// Ver Ka. end
+
   // Initialize OL3
 
   layers = CreateBaseLayers();
@@ -1270,11 +1147,19 @@ function InitializeMap() {
             features: PlaneTrailFeatures,
           }),
         }),
-						//ver Ka start
+
+        iconsLayer,
+      ],
+    }),
+
+    new ol.layer.Group({
+      title: 'JP',
+      layers: [
         new ol.layer.Vector({
           name: 'Rnav_Way',
           type: 'overlay',
-          title: 'Rnav Routes & Points',
+          title: 'Rnav Points & Ways',
+          visible: false,
           source: new ol.source.Vector({
             features: RnavWayFeatures,
           })
@@ -1283,9 +1168,40 @@ function InitializeMap() {
         new ol.layer.Vector({
           name: 'VOR_Way',
           type: 'overlay',
-          title: 'VOR Routes & Points',
+          title: 'VOR Points & Ways',
+          visible: false,
           source: new ol.source.Vector({
             features: VORWayFeatures,
+          })
+        }),
+
+        new ol.layer.Vector({
+          name: 'Direct_Way',
+          type: 'overlay',
+          title: 'Direct Points & Ways',
+          visible: false,
+          source: new ol.source.Vector({
+            features: DirectFeatures,
+          })
+        }),
+
+        new ol.layer.Vector({
+          name: 'arrival',
+          type: 'overlay',
+          title: 'Arrival Points & Ways',
+          visible: false,
+          source: new ol.source.Vector({
+            features: ArrivalFeatures,
+          })
+        }),
+
+        new ol.layer.Vector({
+          name: 'departure',
+          type: 'overlay',
+          title: 'Departure Points & Ways',
+          visible: false,
+          source: new ol.source.Vector({
+            features: DepartureFeatures,
           })
         }),
 
@@ -1293,25 +1209,9 @@ function InitializeMap() {
           name: 'circles',
           type: 'overlay',
           title: 'Airport Circles',
+          visible: true,
           source: new ol.source.Vector({
             features: CircleFeatures,
-          })
-        }),
-
-        new ol.layer.Vector({
-          name: 'arrival',
-          type: 'overlay',
-          title: 'Arrival Points&Ways',
-          source: new ol.source.Vector({
-            features: ArrivalFeatures,
-          })
-        }),
-        new ol.layer.Vector({
-          name: 'departure',
-          type: 'overlay',
-          title: 'Departure Points&Ways',
-          source: new ol.source.Vector({
-            features: DepartureFeatures,
           })
         }),
 
@@ -1319,14 +1219,14 @@ function InitializeMap() {
           name: 'accs',
           type: 'overlay',
           title: 'Accs Areas',
+          visible: true,
           source: new ol.source.Vector({
             features: AccsFeatures,
           })
         }),
-						//ver Ka end
-        iconsLayer,
       ],
     }),
+							// Ver Ka. end
   );
 
   let foundType = false;
@@ -1468,13 +1368,10 @@ function InitializeMap() {
           if (popname === '~') {
             let vsi = '';
             if (Planes[feat.hex].vert_rate > 256) {
-//              vsi = 'climbing';			//Original version
-              vsi = '▲';				//ver Ka
+              vsi = UpTriangle;					// Ver Ka.
             } else if (Planes[feat.hex].vert_rate < -256) {
-//              vsi = 'descending';			//original version
-              vsi = '▼';				//ver Ka
-//            } else vsi = 'level';			//Original version
-            } else vsi = '−';				//ver Ka
+              vsi = DownTriangle;				// Ver Ka.
+            } else vsi = '−';					// Ver Ka.
             const altText = Math.round(
               ConvertAltitude(
                 Planes[feat.hex].altitude,
@@ -1508,32 +1405,17 @@ function InitializeMap() {
                 Planes[feat.hex].operator ? Planes[feat.hex].operator : ''
               }`;
             } else {
-/*              popname = `ICAO: ${Planes[feat.hex].icao}`;
-              popname = `${popname}\nFlt:  ${
-                Planes[feat.hex].flight ? Planes[feat.hex].flight : '?'
-              }`;
-              popname = `${popname}\nType: ${
-                Planes[feat.hex].icaotype ? Planes[feat.hex].icaotype : '?'
-              }`;
-              popname = `${popname}\nReg:  ${
-                Planes[feat.hex].registration
-                  ? Planes[feat.hex].registration
-                  : '?'
-              }`;
-              popname = `${popname}\nAlt:  ${
-                Planes[feat.hex].altitude ? altText : '?'
-              }`;*/				//Original version
 						//ver Ka start
               popname = 'Reg:   ' + (Planes[feat.hex].registration ? Planes[feat.hex].registration : '?');
               popname = `${popname}\nCal:  ${
                 Planes[feat.hex].callsign
                   ? Planes[feat.hex].callsign
-                  : '?'
+                  : 'NoCall'
               }`;
               popname = `${popname}\nTyp:  ${
                 Planes[feat.hex].typeDescription
                   ? Planes[feat.hex].typeDescription
-                  : '?'
+                  : 'Unknown'
               }`;
               popname = `${popname}\nAlt:  ${
                 Planes[feat.hex].altitude
