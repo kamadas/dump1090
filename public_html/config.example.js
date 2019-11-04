@@ -147,3 +147,5 @@ export const ShowHoverOverLabels = true;
 export const ShowUSLayers = false;
 export const ShowEULayers = true;
 export const ShowAdditionalData = true;
+
+export const JP = true;
