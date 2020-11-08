@@ -27,7 +27,7 @@ export const DefaultDisplayUnits = 'nautical';
 export const DefaultCenterLat = 45.0;
 export const DefaultCenterLon = 9.0;
 // The google maps zoom level, 0 - 16, lower is further out
-export const DefaultZoomLvl = 7;
+export const DefaultZoomLvl = 8;
 
 // Center marker. If readsb provides a receiver location,
 // that location is used and these settings are ignored.
