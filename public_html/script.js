@@ -264,7 +264,7 @@ export function RefreshPageTitle() {
     subtitle += `${MessageRate.toFixed(1)}/s`;
   }
 
-  document.title = `${PageName} - ${subtitle}`;
+  document.title = `${subtitle} - ${PageName}`;
 }
 
 function GetFlightAwareIdentLink(ident) {
