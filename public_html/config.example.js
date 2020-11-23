@@ -114,7 +114,7 @@ export const SiteCircles = true; // true to show circles (only shown if the cent
 export const SiteCirclesDistances = [100, 150, 200];
 
 // Controls page title, righthand pane when nothing is selected
-export const PageName = 'readsb radar';
+export const PageName = 'My radar';
 
 // Show country flags by ICAO addresses?
 export const ShowFlags = true;
@@ -146,6 +146,6 @@ export const ShowAdditionalMaps = true;
 export const ShowHoverOverLabels = true;
 export const ShowUSLayers = false;
 export const ShowEULayers = true;
-export const ShowAdditionalData = true;
+export const ShowAdditionalData = false;
 
 export const JP = true;
