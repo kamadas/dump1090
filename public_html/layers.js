@@ -121,10 +121,12 @@ export default function CreateBaseLayers() {
 */							//ver Ka start
       world.push(new ol.layer.Tile({
         source: new ol.source.OSM({
-          url: 'http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+          url: 'http://{a-d}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
+          attributions: 'Courtesy of <a href="https://arto.com">Carto.com</a>'
+          + ' using data by <a href="http://openstreetmap.org/">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbl</a>.',
         }),
-        name: 'osm light',
-        title: 'OpenStreetMap Light',
+        name: 'carto_light_nolabels',
+        title: 'carto.com light_nolabels',
         type: 'base',
       }));
 /*							//ver Ka end
